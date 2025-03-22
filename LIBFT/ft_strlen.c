@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 21:52:44 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:11:12 by asajed           ###   ########.fr       */
+/*   Created: 2024/10/22 10:47:12 by asajed            #+#    #+#             */
+/*   Updated: 2025/03/21 22:26:33 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-#define MINISHELL_H
+#include "libft.h"
 
-#include "LIBFT/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <dirent.h>
-typedef struct s_shell
+size_t	ft_strlen(const char *s)
 {
-	int	exit_code;
-	char	**tokens;
-}	t_shell;
+	size_t	i;
 
-void	lexer(char *line, t_shell *shell);
-
-#endif
+	if (!s)
+		return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}

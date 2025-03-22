@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 21:52:44 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:11:12 by asajed           ###   ########.fr       */
+/*   Created: 2024/10/28 12:43:55 by asajed            #+#    #+#             */
+/*   Updated: 2025/03/21 03:40:39 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-#define MINISHELL_H
-
-#include "LIBFT/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <dirent.h>
-typedef struct s_shell
+
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	int	exit_code;
-	char	**tokens;
-}	t_shell;
+	unsigned int	i;
+	unsigned int	len;
+	char			*str;
 
-void	lexer(char *line, t_shell *shell);
-
-#endif
+	if (!s || !f)
+		return (NULL);
+	len = 0;
+	while (s[len])
+		len++;
+	str = (char *)malloc(len + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		str[i] = f(i, s[i]);
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}

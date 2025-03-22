@@ -1,0 +1,4 @@
+// The t_shell struct has the tokens
+// all you need is call the function lexer after
+// initializing the struct t_shell(impotant for the exit code)
+// t_shell tokens

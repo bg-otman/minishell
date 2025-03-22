@@ -1,22 +1,24 @@
-SRC= main.c
-OBJ= $(SRC:.c=.o)
-NAME= minishell
+LEX= lexer/lexer.c lexer/token_list.c lexer/tokenizer.c lexer/expand_dollar.c \
+lexer/lexer2.c main.c lexer/fdprintf/fdprintf.c lexer/fdprintf/helpers.c lexer/expander.c
+LEX_O= $(LEX:.c=.o)
 CC= cc
 CFLAGS= -Wall -Wextra -Werror
-LDFLAG = -lreadline
+LDFLAGS= -lreadline
+NAME= minishell
+LIBFT= LIBFT/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAG)
+$(NAME): $(LEX_O)
+	@$(CC) -o $@ $(LEX_O) $(LDFLAGS) $(LIBFT)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(LEX_O)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all

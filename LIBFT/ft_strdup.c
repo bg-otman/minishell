@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 21:52:44 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:11:12 by asajed           ###   ########.fr       */
+/*   Created: 2024/10/24 18:08:16 by asajed            #+#    #+#             */
+/*   Updated: 2025/03/21 22:31:14 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-#define MINISHELL_H
-
-#include "LIBFT/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <dirent.h>
-typedef struct s_shell
+#include "libft.h"
+
+char	*ft_strdup(const char *s1)
 {
-	int	exit_code;
-	char	**tokens;
-}	t_shell;
+	int		i;
+	int		j;
+	char	*p;
 
-void	lexer(char *line, t_shell *shell);
-
-#endif
+	i = 0;
+	if (!s1)
+		return (NULL);
+	while (s1[i])
+		i++;
+	p = (char *)malloc(i + 1);
+	if (!p)
+		return (NULL);
+	j = 0;
+	while (j < i)
+	{
+		p[j] = s1[j];
+		j++;
+	}
+	p[j] = '\0';
+	return (p);
+}

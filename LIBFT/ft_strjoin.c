@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 21:52:44 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:11:12 by asajed           ###   ########.fr       */
+/*   Created: 2024/10/26 11:30:24 by asajed            #+#    #+#             */
+/*   Updated: 2025/03/21 22:32:37 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-#define MINISHELL_H
-
-#include "LIBFT/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <dirent.h>
-typedef struct s_shell
+#include "libft.h"
+
+char	*ft_strjoin(char *s1, char *s2)
 {
-	int	exit_code;
-	char	**tokens;
-}	t_shell;
+	char	*str;
 
-void	lexer(char *line, t_shell *shell);
-
-#endif
+	int (i), (j);
+	if (!s1 && !s2)
+		return (NULL);
+	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s1 && s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2 && s2[j])
+	{
+		str[i] = s2[j];
+		i++;
+		j++;
+	}
+	str[i] = '\0';
+	return (str);
+}
