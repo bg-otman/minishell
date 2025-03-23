@@ -64,6 +64,7 @@ char	*get_end(char *str)
 	int	brace;
 
 	i = 0;
+	brace = 0;
 	while (str[i] && str[i] != '$')
 		i++;
 	i++;
