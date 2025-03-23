@@ -116,5 +116,12 @@ void	lexer(char *line, t_shell *shell)
 		return ;
 	}
 	join_tokens(&data);
+	shell->tokens = list_to_array(&data);
+	i = 0;
+	while (shell->tokens && shell->tokens[i])
+	{
+		fdprintf(1, "tokens : %s\n", shell->tokens[i]);
+		i++;
+	}
 	free_token(data.tokens);
 }
