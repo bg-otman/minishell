@@ -23,7 +23,7 @@ char	*get_env(char *name, t_data *data)
 		env_value = getenv(name);
 		if (!env_value)
 			return (ft_strdup(""));
-		ft_strdup(env_value);
+		env_value = ft_strdup(env_value);
 	}
 	return (env_value);
 }
