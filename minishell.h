@@ -3,36 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/01 18:49:33 by asajed           ###   ########.fr       */
+/*   Updated: 2025/03/26 16:08:21 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-typedef struct s_garbage
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libft/libft.h"
+# include "ft_malloc/ft_malloc.h"
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <errno.h>
+# include <dirent.h>
+# include "parser/parser.h"
+
+
+# define true 1
+# define false 0
+# define PROMPT "\x1B[32mminishell ~ \e[1m"
+
+typedef enum e_types
 {
-	void	*ptr;
-	struct s_garbage *next;
-}		t_garbage;
-
-
-void garbage_collector(void);
-
-typedef struct s_flags
-{
-	int		flag;
-}		t_flags;
+    T_COMMAND,
+    T_ARGUMENT,
+    T_PIPE,
+    T_REDIRECTION,
+    T_FILENAME,
+    T_LOGICAL_OP,
+    T_PARENTHESIS,
+} e_types;
 
 typedef struct s_tree
 {
-	char	*str;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}		t_tree;
+    e_types         type;
+    char            *cmd;
+    char            **args;
+    char            *input;
+    char            *output;
+    struct s_tree   *left;
+    struct s_tree   *right;
+} t_tree;
+
+// lexer
+typedef struct s_shell
+{
+	int     exit_code;
+	char    **tokens;
+}       t_shell;
+
+void    lexer(char *line, t_shell *shell);
+
+#endif
