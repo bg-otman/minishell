@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 02:58:57 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/01 15:20:08 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/02 14:37:25 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,30 +112,30 @@ char    **set_args(char **args, char **tokens, int *i)
     
 // }
 
-void    parse_tokens(char **tokens)
-{
-    int     i;
-    e_types type;
-    t_tree  *node;
+// void    parse_tokens(char **tokens)
+// {
+//     int     i;
+//     e_types type;
+//     t_tree  *node;
 
-    if (!tokens)
-        return ;
-    i = 0;
-    while (tokens[i])
-    {
-        type = get_token_type(tokens[i]);
-        if (type != T_REDIRECTION && type != T_PARENTHESIS)
-            node = create_node(type, tokens[i]);
-        if (type == T_COMMAND)
-            node->args = set_args(node->args, tokens, &i);
-        // else if (type == T_REDIRECTION)
-        //     // handle redirection
+//     if (!tokens)
+//         return ;
+//     i = 0;
+//     while (tokens[i])
+//     {
+//         type = get_token_type(tokens[i]);
+//         if (type != T_REDIRECTION && type != T_PARENTHESIS)
+//             node = create_node(type, tokens[i]);
+//         if (type == T_COMMAND)
+//             node->args = set_args(node->args, tokens, &i);
+//         // else if (type == T_REDIRECTION)
+//         //     // handle redirection
             
-        else
-            i++;
-        print_args(node);
+//         else
+//             i++;
+//         print_args(node);
         
-        // add_to_tree(node);
+//         // add_to_tree(node);
         
-    }
-}
+//     }
+// }

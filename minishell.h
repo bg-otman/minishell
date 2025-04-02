@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/02 14:29:55 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/02 14:40:18 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,7 @@ typedef struct s_shell
 }       t_shell;
 
 void    lexer(char *line, t_shell *shell);
+int		fdprintf(int fd, const char *str, ...);
+
 
 #endif

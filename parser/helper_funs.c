@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/01 13:51:37 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/02 14:32:02 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,5 @@
 void    put_error(const char *error_msg)
 {
     write(2, error_msg, ft_strlen(error_msg));
-    free_garbage();
-    exit(1);
+    // write(2, )
 }

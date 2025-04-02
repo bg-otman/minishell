@@ -6,24 +6,14 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:01 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/02 14:30:10 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/02 14:40:48 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "../Libft/libft.h"
-# include <dirent.h>
-# include <errno.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <unistd.h>
+# include "../minishell.h"
 
 typedef enum s_state
 {
