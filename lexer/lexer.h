@@ -6,14 +6,14 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:01 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/01 15:16:42 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/02 14:30:10 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "../libft/libft.h"
+# include "../Libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <readline/history.h>
