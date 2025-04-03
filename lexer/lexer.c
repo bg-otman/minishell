@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:05:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/03 07:12:03 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/03 07:15:52 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,6 @@ void	lexer(char *line, t_shell *shell)
 		fdprintf(1, "tokens : %s\n", shell->tokens[i]);
 		i++;
 	}
-    shell->exit_code = 0;
+    if (shell->tokens)
+        shell->exit_code = 0;
 }
