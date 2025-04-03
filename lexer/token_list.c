@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:17 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:36:52 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/02 19:49:04 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	replace_word(char *new, t_token *old, t_data *data)
 	{
 		if (tmp == old)
 		{
-			free(tmp->value);
 			tmp->value = new;
 			return ;
 		}
@@ -47,31 +46,11 @@ void	replace_word(char *new, t_token *old, t_data *data)
 	data->tokens = tokens;
 }
 
-void	free_token(t_token **tokens)
-{
-	t_token	*tmp;
-	t_token	*next;
-
-	if (!tokens)
-		return ;
-	tmp = (*tokens);
-	while (tmp)
-	{
-		next = tmp->next;
-		free(tmp->value);
-		free(tmp);
-		tmp = next;
-	}
-	if (tokens)
-		free(tokens);
-	tokens = NULL;
-}
-
 t_token	*a_new_token(char *value, t_state state, int cat)
 {
 	t_token	*token;
 
-	token = (t_token *)malloc(sizeof(t_token));
+	token = (t_token *)ft_malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = value;
@@ -93,7 +72,7 @@ void	add_token(t_data *data, char *value, t_state state, int cat)
 		return ;
 	if (!tokens)
 	{
-		tokens = (t_token **)malloc(sizeof(t_token *));
+		tokens = (t_token **)ft_malloc(sizeof(t_token *));
 		(*tokens) = new_token;
 		data->tokens = tokens;
 		return ;

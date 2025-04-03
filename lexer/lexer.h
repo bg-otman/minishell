@@ -3,40 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:01 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 23:00:56 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/02 19:42:35 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "../LIBFT/libft.h"
-# include <dirent.h>
-# include <errno.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <unistd.h>
-
-typedef struct s_garbage
-{
-	void				*ptr;
-	struct s_garbage	*next;
-}						t_garbage;
+# include "../minishell.h"
 
 typedef enum s_state
 {
 	DEFAULT,
 	SINGLE_QUOTE,
 	DOUBLE_QUOTE,
-	BACKSLASH,
 	ESCAPE,
 	REDIRECTION,
 	PARENTHESIS,
@@ -76,9 +59,7 @@ void					handle_quote(t_data *data, char *line, int *i,
 							char quote_char);
 void					skip_whitespace(char *line, int *i);
 void					the_lexer(char *line, t_data *data);
-void					print_list(t_token **tokens);
 int						same_string(char *line, int *i, char quote_char);
-void					free_token(t_token **tokens);
 void					join_tokens(t_data *data);
 void					remove_token(t_token **tokens, t_token *token);
 int						expand_tokens(t_data *data);

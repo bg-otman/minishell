@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:09 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:59:10 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/02 19:48:26 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void	remove_token(t_token **tokens, t_token *token)
 				prev->next = tmp->next;
 			else
 				*tokens = tmp->next;
-			free(tmp->value);
-			free(tmp);
 			return ;
 		}
 		prev = tmp;
@@ -73,10 +71,9 @@ void	join_tokens(t_data *data)
 		if (tmp->cat == 0 && tmp->next)
 		{
 			len = ft_strlen(tmp->value) + ft_strlen(tmp->next->value);
-			value = malloc(len + 1);
+			value = ft_malloc(len + 1);
 			ft_strlcpy(value, tmp->value, len + 1);
 			ft_strlcat(value, tmp->next->value, len + 1);
-			free(tmp->value);
 			tmp->value = value;
 			tmp->cat = tmp->next->cat;
 			remove_token(tokens, tmp->next);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 23:02:13 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/02 19:41:09 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,17 +91,12 @@ int	expand_dollar(t_data *data, t_token *token)
 
 	tmp = get_var(token->value);
 	env_value = get_env(tmp, data);
-	free(tmp);
 	start = get_start(token->value);
 	end = get_end(token->value);
 	if (!end)
-		return (free(start), free(env_value), 1);
+		return (1);
 	tmp = ft_strjoin(start, env_value);
-	free(start);
-	free(env_value);
 	env_value = ft_strjoin(tmp, end);
-	free(tmp);
-	free(end);
 	if (!env_value || !env_value[0])
 		return (remove_token(data->tokens, token), 0);
 	replace_word(env_value, token, data);

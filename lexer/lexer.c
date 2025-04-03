@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:05:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 23:17:23 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/03 07:12:03 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	the_lexer(char *line, t_data *data)
 		skip_whitespace(line, &i);
 		if (data->error)
 		{
-			free_token(data->tokens);
 			data->tokens = NULL;
 			break ;
 		}
@@ -88,7 +87,7 @@ char	**list_to_array(t_data *data)
 	i = 0;
 	len = tokenlen(*data->tokens);
 	tmp = *data->tokens;
-	tokens = malloc((len + 1) * sizeof(char *));
+	tokens = ft_malloc((len + 1) * sizeof(char *));
 	while (tmp)
 	{
 		tokens[i] = ft_strdup(tmp->value);
@@ -110,7 +109,6 @@ void	lexer(char *line, t_shell *shell)
 	if (data.error || expand_tokens(&data))
 	{
 		data.exit_code = 1;
-		free_token(data.tokens);
 		data.tokens = NULL;
 		shell->exit_code = data.exit_code;
 		return ;
@@ -123,5 +121,5 @@ void	lexer(char *line, t_shell *shell)
 		fdprintf(1, "tokens : %s\n", shell->tokens[i]);
 		i++;
 	}
-	free_token(data.tokens);
+    shell->exit_code = 0;
 }
