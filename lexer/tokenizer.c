@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:19 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 18:07:08 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 21:01:18 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void	handle_the_rest(t_data *data, char *line, int *i, t_state state)
 		(*i)++;
 	if (c == '&' && j == 1)
 		j = 3;
-	// || (operator(line[(*i)]) && (c != '<' || line[(*i)] != '>')
-	if (j > 2 )
+	if (j > 2)
 	{
 		fdprintf(2, "minishell : parse error near '%c'\n", c);
 		data->error = 1;
