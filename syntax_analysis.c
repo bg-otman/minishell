@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 18:16:12 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 19:06:22 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,45 @@ char	**add_to_array(char **arr, char *element)
 	return (new_arr);
 }
 
-t_shell	*add_new_node(t_shell *shell)
+t_redir	*new_redir(t_shell *shell)
 {
-	t_shell	*new;
+	t_redir	*new;
 
-	new = ft_malloc(sizeof(t_shell));
-	ft_bzero(new, sizeof(t_shell));
-	new->next = NULL;
-	if (shell)
-		shell->next = new;
+	new = ft_malloc(sizeof(t_redir));
+	ft_bzero(new, sizeof(t_redir));
+	if (shell->redirections)
+		shell->redirections->next = new;
+	else
+		shell->redirections = new;
 	return (new);
+}
+
+void	get_file(t_shell *shell, t_token *token)
+{
+	t_redir	*new;
+
+	new = new_redir(shell);
+	new->file_name = token->next->value;
+	if (!ft_strcmp(token->value, ">"))
+	{
+		new->open_mode = O_TRUNC;
+		new->type = OUTPUT_FILE;
+	}
+	if (!ft_strcmp(token->value, ">>"))
+	{
+		new->open_mode = O_APPEND;
+		new->type = OUTPUT_FILE;
+	}
+	if (!ft_strcmp(token->value, "<<"))
+	{
+		new->open_mode = O_APPEND;
+		new->type = INPUT_FILE;
+	}
+	if (!ft_strcmp(token->value, "<"))
+	{
+		new->open_mode = O_RDONLY;
+		new->type = INPUT_FILE;
+	}
 }
 
 void	get_types(t_shell *shell)
@@ -76,7 +105,10 @@ void	set_list(t_token *token, t_shell *shell)
 		while (token && !is_logical_op(token->value))
 		{
 			if (is_redirection(token->value))
+			{
+				get_file(shell, token);
 				token = token->next;
+			}
 			else if (ft_strcmp(token->value, ")") && ft_strcmp(token->value,
 					"("))
 				shell->args = add_to_array(shell->args, token->value);

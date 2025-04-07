@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 08:10:31 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 17:56:57 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 19:07:13 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,6 @@ void				handle_quote(t_data *data, char *line, int *i,
 						char quote_char);
 void				set_list(t_token *token, t_shell *shell);
 void				get_types(t_shell *shell);
+t_shell				*add_new_node(t_shell *shell);
 
 #endif

@@ -6,11 +6,23 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 20:44:17 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 18:15:16 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 19:06:33 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+t_shell	*add_new_node(t_shell *shell)
+{
+	t_shell	*new;
+
+	new = ft_malloc(sizeof(t_shell));
+	ft_bzero(new, sizeof(t_shell));
+	new->next = NULL;
+	if (shell)
+		shell->next = new;
+	return (new);
+}
 
 int	is_redirection(char *token)
 {
