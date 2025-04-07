@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 19:07:32 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 20:42:24 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	lexer(char *line, t_shell *shell)
 
 	ft_bzero(&data, sizeof(data));
 	splitter(line, &data);
-	if (data.error)
+	if (!data.tokens || data.error)
 		return ;
 	join_tokens(&data);
 	if (data.error)
@@ -103,6 +103,25 @@ void	lexer(char *line, t_shell *shell)
 		return ;
 	set_list(*data.tokens, shell);
 	get_types(shell);
-	if (!data.tokens || data.error)
-		return ;
+	t_shell	*current;
+	t_shell	*next;
+	current = shell;
+	int i = 0;
+	while (current->next)
+	{
+		i = 0;
+		next = current->next;
+		fdprintf(1, "CMD: %s\n", current->cmd);
+		while (current && current->args && current->args[i])
+		{
+			fdprintf(1, "ARG[%d]: %s\n", i,current->args[i]), i++;
+			while (shell->redirections)
+			{
+				fdprintf(1, "FILENAME: %s\n", shell->redirections->file_name);
+				shell->redirections = shell->redirections->next;
+			}
+		}
+		current = next;
+		fdprintf(1, "----------------------------\n");
+	}
 }

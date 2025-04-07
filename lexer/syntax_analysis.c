@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 19:06:22 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 20:50:17 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,34 @@ char	**add_to_array(char **arr, char *element)
 	return (new_arr);
 }
 
+t_shell	*add_new_node(t_shell *shell)
+{
+	t_shell	*new;
+
+	new = ft_malloc(sizeof(t_shell));
+	ft_bzero(new, sizeof(t_shell));
+	new->next = NULL;
+	if (shell)
+		shell->next = new;
+	return (new);
+}
+
 t_redir	*new_redir(t_shell *shell)
 {
 	t_redir	*new;
+	t_redir	*current;
 
 	new = ft_malloc(sizeof(t_redir));
+	current = shell->redirections;
 	ft_bzero(new, sizeof(t_redir));
-	if (shell->redirections)
-		shell->redirections->next = new;
-	else
+	if (!shell->redirections)
 		shell->redirections = new;
+	else
+	{
+		while (current->next)
+			current = current->next;
+		current->next = new;
+	}
 	return (new);
 }
 

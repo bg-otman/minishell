@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 10:22:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 18:17:28 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 20:52:01 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	check_syntax(t_token *token)
 				1);
 		tmp = tmp->next;
 	}
-	if (is_logical_op(tmp->value))
+	if (is_logical_op(tmp->value) || is_redirection(tmp->value))
 		return (fdprintf(1,
 				"minishell: syntax error near unexpected token '%s'\n",
 				tmp->value), 1);
