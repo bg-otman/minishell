@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analysis.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 21:00:21 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/08 12:23:45 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void	set_list(t_token *token, t_shell *shell)
 			shell->cmd = token->value;
 			token = token->next;
 		}
-		shell = add_new_node(shell);
+		if (token)
+			shell = add_new_node(shell);
 	}
 }

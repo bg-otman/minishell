@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/08 10:02:51 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:56:35 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	lexer(char *line, t_shell *shell)
 {
 	t_data	data;
 
-	ft_bzero(&data, sizeof(data));
+	ft_bzero(&data, sizeof(t_data));
 	ft_bzero(shell, sizeof(t_shell));
 	splitter(line, &data);
 	if (!data.tokens || data.error)

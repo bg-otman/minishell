@@ -5,7 +5,7 @@ LEX_O= $(LEX:.c=.o)
 PARS= parser/parser.c parser/helper_funs.c
 PARS_O= $(PARS:.c=.o)
 
-SRC= main.c ft_malloc/ft_malloc.c fdprintf/fdprintf.c fdprintf/helpers.c print_tree.c
+SRC= main.c ft_malloc/ft_malloc.c fdprintf/fdprintf.c fdprintf/helpers.c
 OBJ= $(SRC:.c=.o)
 NAME= minishell
 CC= cc
@@ -18,9 +18,6 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LEX_O) $(PARS_O) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJ) $(LEX_O) $(PARS_O) $(LIBFT) $(RDLINE) -o $(NAME)
 
-# $(NAME): $(OBJ) $(PARS_O) $(LIBFT)
-# 	@$(CC) $(CFLAGS) $(OBJ) $(PARS_O) $(LIBFT) $(RDLINE) -o $(NAME)
-
 $(LIBFT) :
 	@$(MAKE) -C Libft
 
@@ -28,7 +25,6 @@ $(LIBFT) :
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-# @rm -f $(OBJ) $(PARS_O)
 	@rm -f $(OBJ) $(PARS_O) $(LEX_O)
 # @$(MAKE) -C libft clean
 

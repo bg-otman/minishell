@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/08 09:37:05 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/08 17:20:03 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,5 @@ typedef struct s_tree
 void    lexer(char *line, t_shell *shell);
 int		fdprintf(int fd, const char *str, ...);
 
-// temperory funs
-t_shell	*get_commands();
-// void	display_tree(tree);
 
 #endif
