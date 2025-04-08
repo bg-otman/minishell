@@ -6,11 +6,40 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 20:59:25 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/08 21:10:48 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+t_token	*add_group(t_token *token, t_shell **shell)
+{
+	t_token	*start;
+	t_token	*end;
+	int		i;
+
+	i = 1;
+	start = token;
+	(*shell) = add_new_node(NULL);
+	while (token)
+	{
+		if (token && !ft_strcmp("(", token->value))
+		{
+			i++;
+			token = add_group(token, &(*shell)->group);
+		}
+		if (token && !ft_strcmp(")", token->value))
+		{
+			end = token;
+			i--;
+		}
+		if (i == 0)
+			set_group(start, end, (*shell));
+		if (token)
+			token = token->next;
+	}
+	return (token);
+}
 
 void	remove_token(t_token **tokens, t_token *token)
 {
@@ -91,7 +120,8 @@ void	lexer(char *line, t_shell *shell)
 {
 	t_data	data;
 
-	ft_bzero(&data, sizeof(data));
+	ft_bzero(&data, sizeof(t_data));
+	ft_bzero(shell, sizeof(t_shell));
 	splitter(line, &data);
 	if (!data.tokens || data.error)
 		return ;

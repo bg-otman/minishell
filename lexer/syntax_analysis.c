@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 21:00:21 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/08 20:49:18 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,7 @@ void	get_types(t_shell *shell)
 		}
 		else
 		{
-			if (!ft_strcmp(shell->cmd, "(") || !ft_strcmp(shell->cmd, "("))
-				shell->cmd_type = T_PARENTHESIS;
-			else if (!ft_strcmp(shell->cmd, "|"))
+			if (!ft_strcmp(shell->cmd, "|"))
 				shell->cmd_type = T_PIPE;
 			else
 				shell->cmd_type = T_LOGICAL_OP;
@@ -115,18 +113,20 @@ void	set_list(t_token *token, t_shell *shell)
 				get_file(shell, token);
 				token = token->next;
 			}
-			else if (ft_strcmp(token->value, ")") && ft_strcmp(token->value,
-					"("))
+			else if (!ft_strcmp(token->value, "("))
+				token = add_group(token->next, &shell->group);
+			else if (ft_strcmp(token->value, ")"))
 				shell->args = add_to_array(shell->args, token->value);
-			token = token->next;
+			if (token)
+				token = token->next;
 		}
-		if (token && (is_logical_op(token->value) || !ft_strcmp(token->value,
-					")") || !ft_strcmp(token->value, "(")))
+		if (token && (is_logical_op(token->value)))
 		{
 			shell = add_new_node(shell);
 			shell->cmd = token->value;
 			token = token->next;
 		}
-		shell = add_new_node(shell);
+		if (token)
+			shell = add_new_node(shell);
 	}
 }

@@ -6,11 +6,22 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 10:22:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 20:52:01 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/08 21:11:03 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+void	set_group(t_token *start, t_token *end, t_shell *shell)
+{
+	t_token	*link;
+
+	link = end->next;
+	end->next = NULL;
+	set_list(start, shell);
+	get_types(shell);
+	end->next = link;
+}
 
 int	syntax_parenthesis(t_token *token)
 {
