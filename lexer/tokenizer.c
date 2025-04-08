@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:06:19 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/22 22:55:06 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/07 21:01:18 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	handle_word(t_data *data, char *line, int *i)
 	int		start;
 
 	start = (*i);
-	skip_whitespace(line, i);
+	while (line[(*i)] && ft_whitespace(line[(*i)]))
+		(*i)++;
 	if (!line[(*i)])
 		return ;
 	while (line[(*i)] && !ft_whitespace(line[(*i)])
@@ -99,7 +100,7 @@ void	handle_quote(t_data *data, char *line, int *i, char quote_char)
 		data->error = 1;
 		return ;
 	}
-	token = ft_substr(line, start + 1, (*i) - start - 1);
+	token = ft_substr(line, start, (*i) - start + 1);
 	add_token(data, token, state, same_string(line, i, quote_char));
 	(*i)++;
 }

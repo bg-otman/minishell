@@ -5,57 +5,72 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 23:05:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/23 13:43:43 by obouizi          ###   ########.fr       */
+/*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
+/*   Updated: 2025/04/08 10:02:51 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "lexer.h"
 
-int	same_string(char *line, int *i, char c)
+void	remove_token(t_token **tokens, t_token *token)
 {
-	int	j;
+	t_token	*tmp;
+	t_token	*prev;
 
-	j = *i;
-	if (c == ' ')
+	if (!tokens || !*tokens)
+		return ;
+	tmp = *tokens;
+	prev = NULL;
+	while (tmp)
 	{
-		if (line[j] && !ft_whitespace(line[j]) && operator(line[j]) == 0)
-			return (0);
-		return (1);
+		if (tmp == token)
+		{
+			if (prev)
+				prev->next = tmp->next;
+			else
+				*tokens = tmp->next;
+			return ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
 	}
-	if (line[j] == c)
-		j++;
-	if (line[j] && !ft_whitespace(line[j]) && operator(line[j]) == 0)
-		return (0);
-	return (1);
+	token = NULL;
 }
 
-t_state	find_state(char c)
+void	join_tokens(t_data *data)
 {
-	if (c == '\'')
-		return (SINGLE_QUOTE);
-	else if (c == '\"')
-		return (DOUBLE_QUOTE);
-	else if (c == '>' || c == '<')
-		return (REDIRECTION);
-	else if (c == '(' || c == ')')
-		return (PARENTHESIS);
-	else if (c == '&')
-		return (AND);
-	else if (c == '|')
-		return (OR);
-	else
-		return (DEFAULT);
+	t_token	*tmp;
+	t_token	**tokens;
+	char	*value;
+	int		len;
+
+	tokens = data->tokens;
+	if (!tokens || data->error)
+		return ;
+	tmp = *tokens;
+	while (tmp)
+	{
+		if (tmp->cat == 0 && tmp->next)
+		{
+			len = ft_strlen(tmp->value) + ft_strlen(tmp->next->value);
+			value = ft_strjoin(tmp->value, tmp->next->value);
+			tmp->value = value;
+			tmp->cat = tmp->next->cat;
+			remove_token(tokens, tmp->next);
+		}
+		else
+			tmp = tmp->next;
+	}
 }
 
-void	the_lexer(char *line, t_data *data)
+void	splitter(char *line, t_data *data)
 {
 	t_state	state;
 	int		i;
 
 	i = 0;
-	skip_whitespace(line, &i);
+	while (line[i] && ft_whitespace(line[i]))
+		i++;
 	while (line[i])
 	{
 		state = find_state(line[i]);
@@ -65,38 +80,11 @@ void	the_lexer(char *line, t_data *data)
 			handle_quote(data, line, &i, line[i]);
 		else if (state == REDIRECTION || state == AND || state == OR)
 			handle_the_rest(data, line, &i, state);
-		else if (state == PARENTHESIS)
+		else
 			handle_parenthesis(data, line, &i);
-		skip_whitespace(line, &i);
-		if (data->error)
-		{
-			// free_token(data->tokens);
-			data->tokens = NULL;
-			break ;
-		}
+		while (line[i] && ft_whitespace(line[i]))
+			i++;
 	}
-}
-
-char	**list_to_array(t_data *data)
-{
-	char	**tokens;
-	t_token	*tmp;
-
-	int (len), (i);
-	if (!data->tokens || !*data->tokens)
-		return (NULL);
-	i = 0;
-	len = tokenlen(*data->tokens);
-	tmp = *data->tokens;
-	tokens = ft_malloc((len + 1) * sizeof(char *));
-	while (tmp)
-	{
-		tokens[i] = ft_strdup(tmp->value);
-		tmp = tmp->next;
-		i++;
-	}
-	tokens[i] = NULL;
-	return (tokens);
 }
 
 void	lexer(char *line, t_shell *shell)
@@ -104,17 +92,16 @@ void	lexer(char *line, t_shell *shell)
 	t_data	data;
 
 	ft_bzero(&data, sizeof(data));
-	data.exit_code = shell->exit_code;
-	the_lexer(line, &data);
-	if (data.error || expand_tokens(&data))
-	{
-		data.exit_code = 1;
-		// free_token(data.tokens);
-		data.tokens = NULL;
-		shell->exit_code = data.exit_code;
+	ft_bzero(shell, sizeof(t_shell));
+	splitter(line, &data);
+	if (!data.tokens || data.error)
 		return ;
-	}
 	join_tokens(&data);
-	shell->tokens = list_to_array(&data);
-	// free_token(data.tokens);
+	if (data.error)
+		return ;
+	syntax_error(&data);
+	if (data.error)
+		return ;
+	set_list(*data.tokens, shell);
+	get_types(shell);
 }

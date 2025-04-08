@@ -6,136 +6,95 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 02:58:57 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/02 14:37:25 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/08 11:05:04 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "../print_tree.h"
 
-void    print_args(t_tree *node)
+t_tree	*create_node(t_shell *node)
 {
-    printf("cmd : {%s} args : ", node->cmd);
-    for (size_t i = 0; node->args && node->args[i]; i++)
+	t_tree *root;
+	
+	root = ft_malloc(sizeof(t_tree));
+	if (!root)
+		return NULL;
+    if (!node)
     {
-        printf("%s ", node->args[i]);
+        printf("found one\n");
     }
-    printf("\n");
+	root->node = node;
+	root->left = NULL;
+	root->right = NULL;
+	return (root);
 }
 
-e_types get_token_type(char *str)
+t_shell *get_operator(t_shell *start_node, t_shell **previous_node)
 {
-    if (!ft_strcmp(str, "|"))
-        return (T_PIPE);
-    else if (!ft_strcmp(str, ">") || !ft_strcmp(str, "<")
-        || !ft_strcmp(str, ">>") || !ft_strcmp(str, "<<"))
-        return (T_REDIRECTION);
-    else if (!ft_strcmp(str, "&&") || !ft_strcmp(str, "||"))
-        return (T_LOGICAL_OP);
-    else if (!ft_strcmp(str, "(") || !ft_strcmp(str, ")"))
-        return (T_PARENTHESIS);
-    else
-        return (T_COMMAND);
+    t_shell *node;
+    t_shell *operator;
+    t_shell *prev;
+
+    *previous_node = NULL;
+    operator = NULL;
+    prev = NULL;
+    node = start_node;
+    while (node)
+    {
+        if (node->cmd_type == T_LOGICAL_OP)
+        {
+            *previous_node = prev;
+            operator = node;
+        }
+        else if (node->cmd_type == T_PIPE && !operator)
+        {
+            *previous_node = prev;
+            operator = node;
+        }
+        prev = node;
+        node = node->next;
+    }
+    return operator;
 }
 
-
-t_tree  *create_node(e_types type, char *cmd)
+t_tree *build_tree(t_shell *start_node)
 {
     t_tree *root;
+    t_shell *operator;
+    t_shell *previous_node;
+    t_shell *temp;
+    t_shell *after_operator;
 
-    root = ft_malloc(sizeof(t_tree));
-    if (!root)
+    if (!start_node)
         return (NULL);
-    ft_bzero(root, sizeof(root));
-    root->type = type;
-    root->cmd = ft_strdup(cmd);
-    if (!root->cmd)
+    if (!start_node->next)
+        return (create_node(start_node));
+    operator = get_operator(start_node, &previous_node);
+    if (!operator)
+        return (create_node(start_node));
+    root = create_node(operator);
+    after_operator = operator->next; // save link to right list after operator
+    operator->next = NULL; // break the list temporary
+    if (previous_node && start_node != operator)
     {
-        perror("Allocation fail ");
-        free_garbage();
-        exit(1);
+        temp = previous_node->next; // save link to operator
+        previous_node->next = NULL; // break it
+        root->left = build_tree(start_node);
+        previous_node->next = temp; // restore link to operator 
     }
+    operator->next = after_operator; // restore the saved list
+    if (after_operator)
+        root->right = build_tree(after_operator);
     return (root);
 }
 
-// t_tree  *add_to_tree(t_tree *node)
+// t_tree *build_tree(t_shell *tokens)
 // {
-//     if (!node)
-        
-// }
-
-char    **add_to_array(char **arr, char *element)
-{
-    char    **new_arr;
-    int     i;
-    int     j;
-
-    i = 0;
-    while (arr && arr[i])
-        i++;
-    new_arr = ft_malloc(sizeof(char *) * (i + 2));
-    if (!new_arr)
-        return (NULL);
-    j = 0;
-    while (j < i)
-    {
-        new_arr[j] = ft_strdup(arr[j]);
-        j++;
-    }
-    new_arr[j++] = ft_strdup(element);
-    new_arr[j] = NULL;
-    return (new_arr);
-}
-
-char    **set_args(char **args, char **tokens, int *i)
-{
-    e_types type;
-
-    type = get_token_type(tokens[++(*i)]);
-    while (type == T_COMMAND && tokens[(*i)])
-    {
-        args = add_to_array(args, tokens[*i]);
-        type = get_token_type(tokens[++(*i)]);
-    }
-    return (args);
-}
-
-// t_tree  *handle_redirection(char **tokens, int *i)
-// {
-//     int j;
-//     e_types current_type;
-//     e_types next_type;
+//     t_tree *root;
     
-//     if (*i == 0)
-//     {
-//         if ()
-//     }
-    
-// }
-
-// void    parse_tokens(char **tokens)
-// {
-//     int     i;
-//     e_types type;
-//     t_tree  *node;
-
 //     if (!tokens)
-//         return ;
-//     i = 0;
-//     while (tokens[i])
-//     {
-//         type = get_token_type(tokens[i]);
-//         if (type != T_REDIRECTION && type != T_PARENTHESIS)
-//             node = create_node(type, tokens[i]);
-//         if (type == T_COMMAND)
-//             node->args = set_args(node->args, tokens, &i);
-//         // else if (type == T_REDIRECTION)
-//         //     // handle redirection
-            
-//         else
-//             i++;
-//         print_args(node);
-        
-//         // add_to_tree(node);
-        
-//     }
+//         return (NULL);
+//     root = create_tree(tokens);
+//     return (root);
 // }

@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/05 10:04:48 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/08 09:37:05 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@
 
 typedef enum e_types
 {
-    COMMAND,
-    PIPE,
-    REDIRECTION,
-    LOGICAL_OP,
-    PARENTHESIS,
+    T_COMMAND,
+    T_PIPE,
+    T_REDIRECTION,
+    T_LOGICAL_OP,
+    T_PARENTHESIS,
 } e_types;
 
 // LEXER
@@ -69,7 +69,7 @@ typedef struct s_tree
 	struct s_tree   *right;
 } t_tree;
 
-// void    lexer(char *line, t_shell *shell);
+void    lexer(char *line, t_shell *shell);
 int		fdprintf(int fd, const char *str, ...);
 
 // temperory funs
