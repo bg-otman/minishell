@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/08 20:49:18 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/09 09:28:03 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	get_types(t_shell *shell)
 		{
 			if (!ft_strcmp(shell->cmd, "|"))
 				shell->cmd_type = T_PIPE;
+			else if (shell->group)
+				shell->cmd_type = T_PARENTHESIS;
 			else
 				shell->cmd_type = T_LOGICAL_OP;
 		}

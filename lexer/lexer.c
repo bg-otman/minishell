@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/08 21:10:48 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/09 09:27:16 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_token	*add_group(t_token *token, t_shell **shell)
 		if (token && !ft_strcmp("(", token->value))
 		{
 			i++;
-			token = add_group(token, &(*shell)->group);
+			token = add_group(token->next, &(*shell)->group);
 		}
 		if (token && !ft_strcmp(")", token->value))
 		{
