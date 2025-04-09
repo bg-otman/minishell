@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:43:29 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/08 17:23:24 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/09 11:11:24 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    launch_shell(t_shell *tokens)
 		}
 		add_history(line);
 		lexer(line, tokens);
-		root = build_tree(tokens);
+		root = parser(tokens);
 		print_tree(root, 0);
 		free(line);
 	}

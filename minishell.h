@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/08 17:20:03 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/09 11:26:55 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <dirent.h>
-// # include "parser/parser.h"
 
 # define true 1
 # define false 0
@@ -58,6 +57,7 @@ typedef struct s_shell
 	char			*cmd;
 	t_redir			*redirections;
 	struct s_shell	*next;
+	struct s_shell	*group; // for parenthesis
 	e_types			cmd_type;
 }       t_shell;
 
@@ -71,6 +71,5 @@ typedef struct s_tree
 
 void    lexer(char *line, t_shell *shell);
 int		fdprintf(int fd, const char *str, ...);
-
 
 #endif

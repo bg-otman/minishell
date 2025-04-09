@@ -6,11 +6,22 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 10:22:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/07 20:52:01 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/09 09:26:36 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+void	set_group(t_token *start, t_token *end, t_shell *shell)
+{
+	t_token	*link;
+
+	link = end->next;
+	end->next = NULL;
+	set_list(start, shell);
+	get_types(shell);
+	end->next = link;
+}
 
 int	syntax_parenthesis(t_token *token)
 {
@@ -74,8 +85,9 @@ int	check_syntax(t_token *token)
 				tmp->value), 1);
 	while (tmp->next)
 	{
-		if (is_operator(tmp->value) && is_operator(tmp->next->value)
+		if ((is_operator(tmp->value) && is_operator(tmp->next->value)
 			&& !is_valid_adjacent(tmp->value, tmp->next->value))
+			|| (!ft_strcmp(")", tmp->value) && !is_operator(tmp->next->value)))
 			return (fdprintf(1,
 					"minishell: syntax error near unexpected token '%s'\n",
 					tmp->next->value),
