@@ -6,18 +6,19 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:43:29 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/09 11:11:24 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/10 09:11:41 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "parser/parser.h"
 
-void    launch_shell(t_shell *tokens)
+void	launch_shell(t_shell *tokens)
 {
-	t_tree *root;
-	char *line;
+	t_tree	*root;
+	char	*line;
+	int		exit_code;
 
+	exit_code = 0;
 	while (true)
 	{
 		line = readline(PROMPT);
@@ -27,7 +28,9 @@ void    launch_shell(t_shell *tokens)
 			break ;
 		}
 		add_history(line);
-		lexer(line, tokens);
+		exit_code = lexer(line, tokens);
+		if (exit_code)
+			exit_code = 2;
 		root = parser(tokens);
 		print_tree(root, 0);
 		free(line);
@@ -35,14 +38,12 @@ void    launch_shell(t_shell *tokens)
 	free(line);
 }
 
-int main(int ac, char *av[], char *env[])
+int main()
 {
-	(void) ac;
-	(void) av;
-	(void) env;
-	t_shell tokens;
-
+	t_shell	tokens;
+	
 	launch_shell(&tokens);
-	 
 	free_garbage();
+	
+	return (0);
 }

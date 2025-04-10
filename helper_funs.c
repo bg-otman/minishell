@@ -1,24 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   helper_funs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/26 10:14:37 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/09 18:23:11 by obouizi          ###   ########.fr       */
+/*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
+/*   Updated: 2025/04/10 09:12:47 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	*ft_calloc(size_t count, size_t size)
+// remove when done printing
+void print_tree(t_tree *root, int space)
 {
-	void	*ptr;
+    if (root == NULL)
+        return;
 
-	ptr = ft_malloc(size * count);
-	if (ptr == NULL)
-		return (NULL);
-	ft_bzero(ptr, size * count);
-	return (ptr);
+    space += 10;
+
+    print_tree(root->right, space);
+
+    for (int i = 10; i < space; i++)
+        printf(" ");
+    printf("->%s\n", root->node->cmd);
+
+    print_tree(root->left, space);
 }
+
+// void display_tree(t_tree *root)
+// {
+//     print_tree(root, 0);
+// }
+//

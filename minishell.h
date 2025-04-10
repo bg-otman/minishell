@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/09 11:26:55 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/10 09:11:25 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "Libft/libft.h"
-# include "ft_malloc/ft_malloc.h"
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -29,7 +28,7 @@
 
 # define true 1
 # define false 0
-# define PROMPT "\x1B[32mminishell ~ \e[1m"
+# define PROMPT "\x1B[35m\e[1mminishell ~ \x1B[0m"
 # define INPUT_FILE 0
 # define OUTPUT_FILE 1
 
@@ -58,6 +57,7 @@ typedef struct s_shell
 	t_redir			*redirections;
 	struct s_shell	*next;
 	struct s_shell	*group; // for parenthesis
+	int				exit_code;
 	e_types			cmd_type;
 }       t_shell;
 
@@ -69,7 +69,13 @@ typedef struct s_tree
 	struct s_tree   *right;
 } t_tree;
 
-void    lexer(char *line, t_shell *shell);
-int		fdprintf(int fd, const char *str, ...);
+// lexer
+int			lexer(char *line, t_shell *shell);
+// parser
+t_tree		*parser(t_shell *tokens);
+t_tree		*create_node(t_shell *node);
+// helper functions
+void		print_tree(t_tree *root, int space);
+int			fdprintf(int fd, const char *str, ...);
 
 #endif

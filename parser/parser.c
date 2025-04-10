@@ -6,11 +6,11 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 02:58:57 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/09 11:26:19 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/10 09:10:11 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+# include "../minishell.h"
 
 t_tree	*create_node(t_shell *node)
 {

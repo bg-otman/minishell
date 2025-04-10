@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:14:01 by obouizi           #+#    #+#             */
-/*   Updated: 2025/03/23 04:14:30 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/09 19:00:38 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
-# include "../ft_malloc/ft_malloc.h"
+# include <errno.h>
+# include <stdio.h>
+
+
 
 typedef struct s_list
 {
@@ -24,14 +27,26 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+typedef struct s_garbage_collector
+{
+	void						*ptr;
+	struct s_garbage_collector	*next;
+}								t_grbg_collector;
+
+void	*ft_malloc(size_t size);
+void	free_garbage(void);
+
 int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
 int		ft_isprint(int c);
 int		ft_atoi(const char *str);
+int		ft_search(char *haystack, char needle);
+int		is_all_space(char *cmd);
 char	*ft_itoa(int n);
 void	ft_bzero(void *s, size_t n);
+void	*ft_malloc(size_t size);
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);

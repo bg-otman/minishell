@@ -6,11 +6,11 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 04:19:05 by obouizi           #+#    #+#             */
-/*   Updated: 2025/03/23 13:37:46 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/09 19:00:29 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_malloc.h"
+#include "libft.h"
 
 t_grbg_collector	**get_gc(void)
 {
@@ -69,7 +69,7 @@ void	*ft_malloc(size_t size)
 
 	ptr = malloc(size);
 	if (!ptr)
-		return (NULL);
+		return (perror("Allocation fails"), free_garbage(), exit(errno), NULL);
 	track_allocation(ptr);
 	return (ptr);
 }
