@@ -6,11 +6,17 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 11:29:40 by obouizi           #+#    #+#             */
-/*   Updated: 2025/03/23 04:13:50 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/10 15:47:14 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+static int	is_sep(char ch, char c)
+{
+	return (ch == c || ch == ' ' || ch == '\t' || ch == '\n'
+		|| ch == '\v' || ch == '\f' || ch == '\r');
+}
 
 static int	ft_countword(char const *s, char c)
 {
@@ -19,14 +25,12 @@ static int	ft_countword(char const *s, char c)
 
 	i = 0;
 	count = 0;
-	while (s[i] == c && c != '\0')
+	while (s[i] && is_sep(s[i], c))
 		i++;
 	while (s[i])
 	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-		{
+		if (!is_sep(s[i], c) && (is_sep(s[i + 1], c) || s[i + 1] == '\0'))
 			count++;
-		}
 		i++;
 	}
 	return (count);
@@ -37,13 +41,14 @@ static int	ft_getlen(char const *s, char c, int *start)
 	int	i;
 
 	i = *start;
-	while (s[i] == c && s[i] != '\0')
+	while (s[i] && is_sep(s[i], c))
 		i++;
 	*start = i;
-	while (s[i] != c && s[i] != '\0')
+	while (s[i] && !is_sep(s[i], c))
 		i++;
 	return (i);
 }
+
 
 char	**ft_allocate(char const *s, char c, char **ptr, int count)
 {
