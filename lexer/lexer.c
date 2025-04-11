@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/09 09:27:16 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/11 11:44:43 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_token	*add_group(t_token *token, t_shell **shell)
 			i--;
 		}
 		if (i == 0)
-			set_group(start, end, (*shell));
+			return (set_group(start, end, (*shell)), token);
 		if (token)
 			token = token->next;
 	}
@@ -116,7 +116,7 @@ void	splitter(char *line, t_data *data)
 	}
 }
 
-void	lexer(char *line, t_shell *shell)
+int	lexer(char *line, t_shell *shell)
 {
 	t_data	data;
 
@@ -124,13 +124,17 @@ void	lexer(char *line, t_shell *shell)
 	ft_bzero(shell, sizeof(t_shell));
 	splitter(line, &data);
 	if (!data.tokens || data.error)
-		return ;
+		return (data.error);
+	expand_tokens(&data);
+	if (!data.tokens || data.error)
+		return (data.error);
 	join_tokens(&data);
 	if (data.error)
-		return ;
+		return (data.error);
 	syntax_error(&data);
 	if (data.error)
-		return ;
+		return (data.error);
 	set_list(*data.tokens, shell);
 	get_types(shell);
+	return (data.error);
 }

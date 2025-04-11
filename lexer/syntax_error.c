@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 10:22:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/09 09:26:36 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/10 14:59:18 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	check_syntax(t_token *token)
 	t_token	*tmp;
 
 	tmp = token;
+	if (!token)
+		return (0);
 	if (is_logical_op(tmp->value))
 		return (fdprintf(1,
 				"minishell: syntax error near unexpected token '%s'\n",
@@ -86,12 +88,12 @@ int	check_syntax(t_token *token)
 	while (tmp->next)
 	{
 		if ((is_operator(tmp->value) && is_operator(tmp->next->value)
-			&& !is_valid_adjacent(tmp->value, tmp->next->value))
-			|| (!ft_strcmp(")", tmp->value) && !is_operator(tmp->next->value)))
+				&& !is_valid_adjacent(tmp->value, tmp->next->value))
+			|| ((!ft_strcmp(")", tmp->value) && !is_operator(tmp->next->value))
+				|| (!is_operator(tmp->value) && !ft_strcmp("(", tmp->next->value))))
 			return (fdprintf(1,
 					"minishell: syntax error near unexpected token '%s'\n",
-					tmp->next->value),
-				1);
+					tmp->next->value), 1);
 		tmp = tmp->next;
 	}
 	if (is_logical_op(tmp->value) || is_redirection(tmp->value))
