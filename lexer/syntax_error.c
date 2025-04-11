@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 10:22:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/10 14:59:18 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/11 17:28:55 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_parenthesis(t_token *token)
 				"minishell: syntax error near unexpected token '('\n"), 1);
 }
 
-int	check_syntax(t_token *token)
+int	check_syntax(t_token *token, char *message)
 {
 	t_token	*tmp;
 
@@ -82,24 +82,19 @@ int	check_syntax(t_token *token)
 	if (!token)
 		return (0);
 	if (is_logical_op(tmp->value))
-		return (fdprintf(1,
-				"minishell: syntax error near unexpected token '%s'\n",
-				tmp->value), 1);
+		return (fdprintf(1, "%s '%s'\n", message, tmp->value), 1);
 	while (tmp->next)
 	{
 		if ((is_operator(tmp->value) && is_operator(tmp->next->value)
 				&& !is_valid_adjacent(tmp->value, tmp->next->value))
 			|| ((!ft_strcmp(")", tmp->value) && !is_operator(tmp->next->value))
-				|| (!is_operator(tmp->value) && !ft_strcmp("(", tmp->next->value))))
-			return (fdprintf(1,
-					"minishell: syntax error near unexpected token '%s'\n",
-					tmp->next->value), 1);
+				|| (!is_operator(tmp->value)
+					&& !ft_strcmp("(", tmp->next->value))))
+			return (fdprintf(1, "%s '%s'\n", message, tmp->next->value), 1);
 		tmp = tmp->next;
 	}
 	if (is_logical_op(tmp->value) || is_redirection(tmp->value))
-		return (fdprintf(1,
-				"minishell: syntax error near unexpected token '%s'\n",
-				tmp->value), 1);
+		return (fdprintf(1, "%s '%s'\n", message, tmp->value), 1);
 	return (0);
 }
 
@@ -113,7 +108,8 @@ void	syntax_error(t_data *data)
 		data->error = 1;
 		return ;
 	}
-	if (check_syntax((*data->tokens)))
+	if (check_syntax((*data->tokens),
+			ft_strdup("minishell: syntax error near unexpected token")))
 	{
 		data->error = 1;
 		return ;
