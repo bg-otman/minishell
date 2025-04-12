@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/12 12:33:00 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/12 13:05:35 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	add_words(char **new, t_token *old, t_data *data)
 			next = tmp->next;
 			tmp->value = new[0];
 			tmp->next = NULL;
-			while (new[i + 1])
+			while (new[i] && new[i + 1])
 				add_token(data, new[i++], DEFAULT, 1);
 			if (new[i])
 				add_token(data, new[i], DEFAULT, tmp->cat);
