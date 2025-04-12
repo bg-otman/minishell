@@ -14,6 +14,10 @@
 
 static int	is_sep(char ch, char c)
 {
+	if (c != ' ' && ch == c)
+		return (1);
+	else if (c != ' ' && ch != c)
+		return (0);
 	return (ch == c || ch == ' ' || ch == '\t' || ch == '\n'
 		|| ch == '\v' || ch == '\f' || ch == '\r');
 }
