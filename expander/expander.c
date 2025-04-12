@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/11 11:48:11 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/12 12:33:00 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int	expand_tokens(t_data *data)
 
 	if (!data->tokens)
 		return (0);
-	previous = NULL;
+	previous = *(data->tokens);
 	tmp = *(data->tokens);
 	while (tmp)
 	{
@@ -133,14 +133,12 @@ int	expand_tokens(t_data *data)
 		{
 			if (expand_dollar(data, tmp))
 				return (1);
-			if (previous)
-				tmp = previous->next;
-			else
-				tmp = (*(data->tokens));
+			tmp = previous;
 			continue ;
 		}
 		previous = tmp;
 		tmp = tmp->next;
 	}
+	expand_wildcard(data);
 	return (0);
 }
