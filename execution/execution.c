@@ -6,21 +6,11 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/12 18:46:14 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:59:20 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static void	clean_child_ressources(int prev_pipe, int *current_pipe)
-{
-	close_fd(prev_pipe);
-	if (current_pipe)
-	{
-		close_fd(current_pipe[0]);
-		close_fd(current_pipe[1]);
-	}
-}
 
 void	execute_command(t_shell *cmd, int prev_pipe, int *current_pipe,
 		int is_last_cmd)
@@ -70,29 +60,61 @@ pid_t	process_command(t_shell *cmd, int prev_pipe, int *current_pipe,
 	return (process_id);
 }
 
+pid_t	execute_pipe(t_tree *root, int *current_pipe, int prev_pipe, int *is_last)
+{
+	pid_t	last_cpid;
+
+	if (pipe(current_pipe) == -1)
+		clean_and_exit("pipe");
+	*is_last = false;
+	execute_tree(root->left, prev_pipe, current_pipe, *is_last);
+	prev_pipe = current_pipe[0];
+	if (root->right && root->right->node->cmd_type == T_COMMAND)
+		*is_last = true;
+	last_cpid = execute_tree(root->right, prev_pipe, current_pipe, *is_last);
+	return (last_cpid);
+}
+
+pid_t	execute_logical_op(t_tree *root, int *current_pipe, int prev_pipe, int *is_last)
+{
+	pid_t	last_cpid;
+	int		exit_code;
+	
+	last_cpid = -1;
+	if (!ft_strcmp(root->node->cmd, "&&"))
+	{
+		last_cpid = execute_tree(root->left, prev_pipe, current_pipe, *is_last);
+		exit_code = wait_for_children(last_cpid);
+		if (exit_code == 0)
+			last_cpid = execute_tree(root->right, prev_pipe, current_pipe, *is_last);
+	}
+	else
+	{
+		last_cpid = execute_tree(root->left, prev_pipe, current_pipe, *is_last);
+		exit_code = wait_for_children(last_cpid);
+		if (exit_code != 0)
+			last_cpid = execute_tree(root->right, prev_pipe, current_pipe, *is_last);	
+	}
+	return (last_cpid);
+}
+
 pid_t	execute_tree(t_tree *root, int prev_pipe, int *curr_pipe, int is_last)
 {
-	int	current_pipe[2];
+	int		current_pipe[2];
+	pid_t	last_cpid;
 
 	init_pipe(current_pipe);
+	last_cpid = -1;
 	if (!root)
 		return (-1);
 	if (root->node->cmd_type == T_PIPE)
 	{
-		if (pipe(current_pipe) == -1)
-			clean_and_exit("pipe");
-		is_last = false;
-		execute_tree(root->left, prev_pipe, current_pipe, is_last);
-		prev_pipe = current_pipe[0];
-		if (root->right && root->right->node->cmd_type == T_COMMAND)
-			is_last = true;
-		execute_tree(root->right, prev_pipe, current_pipe, is_last);
+		last_cpid = execute_pipe(root, current_pipe, prev_pipe, &is_last);
 		close_fd(prev_pipe);
 	}
 	else if (root->node->cmd_type == T_COMMAND)
 		return (process_command(root->node, prev_pipe, curr_pipe, is_last));
 	else if (root->node->cmd_type == T_LOGICAL_OP)
-	{
-	}
-	return (-1);
+		last_cpid = execute_logical_op(root, current_pipe, prev_pipe, &is_last);
+	return (last_cpid);
 }

@@ -8,7 +8,7 @@ EXP_O= $(EXP:.c=.o)
 PARS= parser/parser.c
 PARS_O= $(PARS:.c=.o)
 
-SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c helper_funs.c execution/execution.c
+SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c execution/helper_funs.c execution/execution.c
 OBJ= $(SRC:.c=.o)
 NAME= minishell
 CC= cc

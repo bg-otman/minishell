@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/13 14:44:40 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:00:55 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "Libft/libft.h"
 # include <signal.h>
 # include <sys/types.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <errno.h>
@@ -82,12 +84,14 @@ t_tree		*parser(t_shell *tokens);
 t_tree		*create_node(t_shell *node);
 // execution
 pid_t   	execute_tree(t_tree *root, int prev_pipe, int *current_pipe, int is_last);
+int			wait_for_children(pid_t last_cpid);
 // helper functions
-void		print_tree(t_tree *root, int space);
+int			is_builtin(char *cmd);
 int			fdprintf(int fd, const char *str, ...);
+void		print_tree(t_tree *root, int space);
 void		clean_and_exit(const char *error);
 void		init_pipe(int *pipe);
-int			is_builtin(char *cmd);
 void		close_fd(int fd);
+void		clean_child_ressources(int prev_pipe, int *current_pipe);
 
 #endif

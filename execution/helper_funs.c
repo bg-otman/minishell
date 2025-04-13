@@ -6,11 +6,11 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/13 14:45:38 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:59:08 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	init_pipe(int *pipe)
 {
