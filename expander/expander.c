@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/13 15:13:25 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/13 19:25:32 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ char	*remove_quotes(char *token)
 	{
 		if (!quote && (token[i] == '\'' || token[i] == '\"'))
 			quote = token[i++];
-		else if (quote && (token[i] == quote))
-		{
+		else if (quote && (token[i] == quote) && token[i++])
 			quote = 0;
-			i++;
-		}
+		else if (token[i] == '\\' && token[i + 1]
+			&& (token[i + 1] == '\"' || token[i + 1] == '\''))
+			str[j++] = token[++i];
 		else
 			str[j++] = token[i++];
 	}

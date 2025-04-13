@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/12 18:30:46 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/13 18:49:42 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*get_env(char *name)
 	}
 	if (!my_env || !my_env[i])
 		return (ft_strdup(""));
-	ft_strdup(env_value);
+	env_value = odd_quotes(env_value);
 	return (env_value);
 }
 
