@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_analysis.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/09 11:06:35 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/10 15:47:20 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,7 @@ void	set_list(t_token *token, t_shell *shell)
 				token = token->next;
 			}
 			else if (!ft_strcmp(token->value, "("))
-			{
 				token = add_group(token->next, &shell->group);
-			}
 			else if (ft_strcmp(token->value, ")"))
 				shell->args = add_to_array(shell->args, token->value);
 			if (token)

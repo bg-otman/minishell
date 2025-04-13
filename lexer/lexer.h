@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 08:10:31 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/08 21:11:19 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/09 14:41:11 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void			get_types(t_shell *shell);
 t_shell			*add_new_node(t_shell *shell);
 t_token			*add_group(t_token *token, t_shell **shell);
 void			set_group(t_token *start, t_token *end, t_shell *shell);
+int				expand_tokens(t_data *data);
 
 #endif

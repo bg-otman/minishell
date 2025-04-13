@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 11:29:40 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/10 15:47:14 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 14:47:24 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static int	ft_getlen(char const *s, char c, int *start)
 		i++;
 	return (i);
 }
-
 
 char	**ft_allocate(char const *s, char c, char **ptr, int count)
 {

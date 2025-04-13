@@ -2,10 +2,13 @@ LEX= lexer/lexer.c lexer/checker.c lexer/helpers.c lexer/syntax_analysis.c lexer
 lexer/syntax_error.c
 LEX_O= $(LEX:.c=.o)
 
+EXP= expander/expander.c expander/expand_dollar.c expander/expand_wildcard.c
+EXP_O= $(EXP:.c=.o)
+
 PARS= parser/parser.c
 PARS_O= $(PARS:.c=.o)
 
-SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c helper_funs.c
+SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c helper_funs.c execution/execution.c
 OBJ= $(SRC:.c=.o)
 NAME= minishell
 CC= cc
@@ -16,8 +19,8 @@ INCLUDES= minishell.h
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LEX_O) $(PARS_O) $(LIBFT) $(INCLUDES)
-	@$(CC) $(CFLAGS) $(OBJ) $(LEX_O) $(PARS_O) $(LIBFT) $(RDLINE) -o $(NAME)
+$(NAME): $(OBJ) $(LEX_O) $(EXP_O) $(PARS_O) $(LIBFT) $(INCLUDES)
+	@$(CC) $(CFLAGS) $(OBJ) $(LEX_O) $(EXP_O) $(PARS_O) $(LIBFT) $(RDLINE) -o $(NAME)
 
 $(LIBFT) :
 	@$(MAKE) -C Libft
@@ -26,7 +29,7 @@ $(LIBFT) :
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@rm -f $(OBJ) $(PARS_O) $(LEX_O)
+	@rm -f $(OBJ) $(PARS_O) $(LEX_O) $(EXP_O)
 # @$(MAKE) -C libft clean
 
 fclean: clean

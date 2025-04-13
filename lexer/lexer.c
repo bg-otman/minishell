@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/09 16:53:08 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:11:06 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ t_token	*add_group(t_token *token, t_shell **shell)
 			i--;
 		}
 		if (i == 0)
-		{
-			set_group(start, end, (*shell));
-			break;
-		}
+			return (set_group(start, end, (*shell)), token);
 		if (token)
 			token = token->next;
 	}
@@ -126,6 +123,9 @@ int	lexer(char *line, t_shell *shell)
 	ft_bzero(&data, sizeof(t_data));
 	ft_bzero(shell, sizeof(t_shell));
 	splitter(line, &data);
+	if (!data.tokens || data.error)
+		return (data.error);
+	expand_tokens(&data);
 	if (!data.tokens || data.error)
 		return (data.error);
 	join_tokens(&data);

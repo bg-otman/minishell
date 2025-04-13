@@ -1,0 +1,5 @@
+.*
+!.gitignore
+!.gitattributes
+execution/pipex/
+.vscode/launch.json

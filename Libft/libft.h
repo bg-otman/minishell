@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:14:01 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/09 19:00:38 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 14:47:32 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include <limits.h>
 # include <errno.h>
 # include <stdio.h>
-
-
 
 typedef struct s_list
 {

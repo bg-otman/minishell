@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/10 09:11:25 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 14:44:40 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@
 
 # define true 1
 # define false 0
-# define PROMPT "\x1B[35m\e[1mminishell ~ \x1B[0m"
+# define PROMPT "🤖 \x1B[35m\e[1mminishell ▶️ \x1B[0m"
+# define B_PROMPT "💀 \x1B[31m\e[1mminishell ▶️ \x1B[0m"
 # define INPUT_FILE 0
 # define OUTPUT_FILE 1
+# define SYNTAX_ERROR 2
 
 typedef enum e_types
 {
@@ -39,7 +41,7 @@ typedef enum e_types
     T_REDIRECTION,
     T_LOGICAL_OP,
     T_PARENTHESIS,
-} e_types;
+} t_types;
 
 // LEXER
 typedef struct  s_redirection
@@ -57,9 +59,11 @@ typedef struct s_shell
 	t_redir			*redirections;
 	struct s_shell	*next;
 	struct s_shell	*group; // for parenthesis
-	int				exit_code;
-	e_types			cmd_type;
+	t_types			cmd_type;
 }       t_shell;
+
+// execution
+
 
 // PARSER
 typedef struct s_tree
@@ -71,11 +75,19 @@ typedef struct s_tree
 
 // lexer
 int			lexer(char *line, t_shell *shell);
+//expander
+void		finalize_tree(t_tree *root);
 // parser
 t_tree		*parser(t_shell *tokens);
 t_tree		*create_node(t_shell *node);
+// execution
+pid_t   	execute_tree(t_tree *root, int prev_pipe, int *current_pipe, int is_last);
 // helper functions
 void		print_tree(t_tree *root, int space);
 int			fdprintf(int fd, const char *str, ...);
+void		clean_and_exit(const char *error);
+void		init_pipe(int *pipe);
+int			is_builtin(char *cmd);
+void		close_fd(int fd);
 
 #endif
