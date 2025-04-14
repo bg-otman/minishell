@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/13 17:00:55 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:07:30 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,15 @@ typedef struct s_shell
 	t_types			cmd_type;
 }       t_shell;
 
-// execution
+// expander
 
+typedef struct s_expander
+{
+	char	**env;
+	char	**my_env;
+	int		ignored;
+	int		exit_code;
+} t_expander;
 
 // PARSER
 typedef struct s_tree
@@ -79,6 +86,8 @@ typedef struct s_tree
 int			lexer(char *line, t_shell *shell);
 //expander
 void		finalize_tree(t_tree *root);
+void		add_env(void);
+t_expander	*expander(void);
 // parser
 t_tree		*parser(t_shell *tokens);
 t_tree		*create_node(t_shell *node);

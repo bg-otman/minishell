@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/11 18:45:54 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/12 18:30:46 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,24 @@
 
 char	*get_env(char *name)
 {
-	char	*env_value;
+	char		*env_value;
+	char		*cmp;
+	char		**my_env;
+	int			i;
 
-	env_value = getenv(name);
-	if (!env_value)
+	i = 0;
+	my_env = expander()->my_env;
+	cmp = ft_strjoin(name, "=");
+	while (my_env && my_env[i])
+	{
+		if (my_env[i] && !ft_strncmp(cmp, my_env[i], ft_strlen(cmp)))
+		{
+			env_value = ft_strdup(ft_strchr(my_env[i], '=') + 1);
+			break ;
+		}
+		i++;
+	}
+	if (!my_env || !my_env[i])
 		return (ft_strdup(""));
 	ft_strdup(env_value);
 	return (env_value);

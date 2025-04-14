@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/12 13:05:35 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/13 15:13:25 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int	expand_tokens(t_data *data)
 		{
 			if (expand_dollar(data, tmp))
 				return (1);
-			tmp = previous;
+			tmp = *(data)->tokens;
 			continue ;
 		}
 		previous = tmp;

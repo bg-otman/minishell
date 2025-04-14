@@ -6,11 +6,16 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/13 16:59:20 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:35:01 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// void	verify_cmd(t_shell *cmd) // get path and verify cmd is exist
+// {
+	
+// }
 
 void	execute_command(t_shell *cmd, int prev_pipe, int *current_pipe,
 		int is_last_cmd)

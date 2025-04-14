@@ -2,13 +2,13 @@ LEX= lexer/lexer.c lexer/checker.c lexer/helpers.c lexer/syntax_analysis.c lexer
 lexer/syntax_error.c
 LEX_O= $(LEX:.c=.o)
 
-EXP= expander/expander.c expander/expand_dollar.c expander/expand_wildcard.c
+EXP= expander/expander.c expander/expand_dollar.c expander/expand_wildcard.c expander/add_env.c
 EXP_O= $(EXP:.c=.o)
 
 PARS= parser/parser.c
 PARS_O= $(PARS:.c=.o)
 
-SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c execution/helper_funs.c execution/execution.c
+SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c execution/helper_funs.c execution/execution.c execution/utils.c
 OBJ= $(SRC:.c=.o)
 NAME= minishell
 CC= cc
