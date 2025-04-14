@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/10 15:47:20 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/14 16:22:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ void	get_file(t_shell *shell, t_token *token)
 	new->file_name = token->next->value;
 	if (!ft_strcmp(token->value, ">"))
 	{
-		new->open_mode = O_TRUNC;
+		new->open_mode = O_CREAT | O_WRONLY | O_TRUNC;
 		new->type = OUTPUT_FILE;
 	}
 	if (!ft_strcmp(token->value, ">>"))
 	{
-		new->open_mode = O_APPEND;
+		new->open_mode = O_APPEND | O_CREAT | O_WRONLY;
 		new->type = OUTPUT_FILE;
 	}
 	if (!ft_strcmp(token->value, "<<"))
@@ -97,6 +97,8 @@ void	get_types(t_shell *shell)
 				shell->cmd_type = T_PIPE;
 			else if (shell->group)
 				shell->cmd_type = T_PARENTHESIS;
+			else if (shell->redirections)
+				shell->cmd_type = T_COMMAND;
 			else
 				shell->cmd_type = T_LOGICAL_OP;
 		}

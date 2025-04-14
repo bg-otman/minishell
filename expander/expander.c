@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/13 19:25:32 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:20:40 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,9 @@ void	replace_word(char *new, t_token *old, t_data *data)
 int	expand_tokens(t_data *data)
 {
 	t_token	*tmp;
-	t_token	*previous;
 
 	if (!data->tokens)
 		return (0);
-	previous = *(data->tokens);
 	tmp = *(data->tokens);
 	while (tmp)
 	{
@@ -136,7 +134,6 @@ int	expand_tokens(t_data *data)
 			tmp = *(data)->tokens;
 			continue ;
 		}
-		previous = tmp;
 		tmp = tmp->next;
 	}
 	expand_wildcard(data);
