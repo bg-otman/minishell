@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/13 18:49:42 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:26:04 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*get_env(char *name)
 
 	i = 0;
 	my_env = expander()->my_env;
+	if (!ft_strcmp("?", name))
+		return (ft_itoa(expander()->exit_code));
 	cmp = ft_strjoin(name, "=");
 	while (my_env && my_env[i])
 	{
