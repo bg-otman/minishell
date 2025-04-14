@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:43:29 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/13 18:15:31 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:11:44 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,17 @@ void	launch_shell(t_shell *tokens)
 		{
 			exit_code = SYNTAX_ERROR;
 			expander()->exit_code = exit_code;
+			printf("exit_status [%d]\n", exit_code);
 			continue;
 		}
 		root = parser(tokens);
 		// print_tree(root, 0);
 		last_cpid = execute_tree(root, prev_pipe, NULL, false);
 		exit_code =  wait_for_children(last_cpid);
-		expander()->exit_code = exit_code;
+		if (exit_code == -1)
+			exit_code = expander()->exit_code;
+		else
+			expander()->exit_code = exit_code;
 		printf("exit_status [%d]\n", exit_code);
 		free(line);
 	}

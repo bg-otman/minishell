@@ -8,11 +8,11 @@ EXP_O= $(EXP:.c=.o)
 PARS= parser/parser.c
 PARS_O= $(PARS:.c=.o)
 
-SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c execution/helper_funs.c execution/execution.c execution/utils.c
+SRC= main.c fdprintf/fdprintf.c fdprintf/helpers.c execution/helper_funs.c execution/execution.c execution/utils.c execution/mini_helpers.c
 OBJ= $(SRC:.c=.o)
 NAME= minishell
 CC= cc
-CFLAGS= -g -Wall -Wextra #-Werror
+CFLAGS= -g -Wall -Wextra -Werror
 RDLINE = -lreadline
 LIBFT= Libft/libft.a
 INCLUDES= minishell.h

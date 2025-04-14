@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/13 17:07:30 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:12:39 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_shell
 {
 	char			**args;
 	char			*cmd;
+	int				is_exist;
 	t_redir			*redirections;
 	struct s_shell	*next;
 	struct s_shell	*group; // for parenthesis
@@ -65,7 +66,6 @@ typedef struct s_shell
 }       t_shell;
 
 // expander
-
 typedef struct s_expander
 {
 	char	**env;
@@ -94,6 +94,9 @@ t_tree		*create_node(t_shell *node);
 // execution
 pid_t   	execute_tree(t_tree *root, int prev_pipe, int *current_pipe, int is_last);
 int			wait_for_children(pid_t last_cpid);
+int			get_redirections(t_shell *cmd, int *in_file, int *out_file);
+void		get_cmd_path(t_shell *cmd);
+void		check_paths(t_shell *cmd, char **paths);
 // helper functions
 int			is_builtin(char *cmd);
 int			fdprintf(int fd, const char *str, ...);
@@ -102,5 +105,6 @@ void		clean_and_exit(const char *error);
 void		init_pipe(int *pipe);
 void		close_fd(int fd);
 void		clean_child_ressources(int prev_pipe, int *current_pipe);
+void		get_exit_code(char *cmd);
 
 #endif

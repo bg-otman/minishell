@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/12 13:11:06 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:56:20 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	join_tokens(t_data *data)
 	t_token	*tmp;
 	t_token	**tokens;
 	char	*value;
-	int		len;
 
 	tokens = data->tokens;
 	if (!tokens || data->error)
@@ -81,7 +80,6 @@ void	join_tokens(t_data *data)
 	{
 		if (tmp->cat == 0 && tmp->next)
 		{
-			len = ft_strlen(tmp->value) + ft_strlen(tmp->next->value);
 			value = ft_strjoin(tmp->value, tmp->next->value);
 			tmp->value = value;
 			tmp->cat = tmp->next->cat;

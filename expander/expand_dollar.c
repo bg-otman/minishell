@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/12 18:30:46 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:52:59 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*get_env(char *name)
 
 	i = 0;
 	my_env = expander()->my_env;
+	if (!ft_strcmp("?", name))
+		return (ft_itoa(expander()->exit_code));
 	cmp = ft_strjoin(name, "=");
 	while (my_env && my_env[i])
 	{

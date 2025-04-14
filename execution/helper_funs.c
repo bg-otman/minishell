@@ -6,51 +6,56 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/13 16:59:08 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:19:55 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	init_pipe(int *pipe)
+void	check_paths(t_shell *cmd, char **paths)
 {
-	pipe[0] = -1;
-	pipe[1] = -1;
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (paths && paths[i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		tmp = ft_strjoin(tmp, cmd->cmd);
+		if (access(tmp, F_OK) == 0)
+		{
+			cmd->is_exist = true;
+			cmd->cmd = tmp;
+			break ;
+		}
+		i++;
+	}
 }
 
-int is_builtin(char *cmd)
+void	get_cmd_path(t_shell *cmd)
 {
-    return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "pwd")
-        || !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
-        || !ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "exit"));
-}
+	int		i;
+	char	**env;
+	char	**paths;
 
-void	close_fd(int fd)
-{
-	if (fd >= 3)
-		close(fd);
-}
-
-void    clean_and_exit(const char *error)
-{
-    perror(error);
-    free_garbage();
-    exit(EXIT_FAILURE);
-}
-
-// remove when done printing
-void print_tree(t_tree *root, int space)
-{
-    if (root == NULL)
-        return;
-
-    space += 10;
-
-    print_tree(root->right, space);
-
-    for (int i = 10; i < space; i++)
-        printf(" ");
-    printf("->%s\n", root->node->cmd);
-
-    print_tree(root->left, space);
+	i = 0;
+	env = expander()->my_env;
+	paths = NULL;
+	if (!cmd->cmd)
+		return ;
+	while (env && env[i])
+	{
+		if (!ft_strncmp(env[i], "PATH=", 5))
+		{
+			paths = ft_split(env[i] + 5, ':');
+			break ;
+		}
+		i++;
+	}
+	if (ft_search(cmd->cmd, '/'))
+	{
+		cmd->is_exist = true;
+		return ;
+	}
+	check_paths(cmd, paths);
 }
