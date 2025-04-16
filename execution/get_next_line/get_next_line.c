@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 20:59:24 by obouizi           #+#    #+#             */
-/*   Updated: 2025/01/24 10:21:23 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 12:24:36 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*allocate_line(char *buffer)
 	if (len == -1)
 		len = ft_slen(buffer);
 	i = 0;
-	ptr = (char *) malloc(len + 1);
+	ptr = (char *) ft_malloc(len + 1);
 	if (!ptr)
 		return (NULL);
 	while (i < len)
@@ -49,7 +49,7 @@ ssize_t	read_data(int fd, char **buffer)
 			return (-1);
 		}
 	}
-	*buffer = (char *) malloc(BUFFER_SIZE + 1);
+	*buffer = (char *) ft_malloc(BUFFER_SIZE + 1);
 	if (!*buffer)
 		return (-1);
 	bytes_read = read(fd, *buffer, BUFFER_SIZE);

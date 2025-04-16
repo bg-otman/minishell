@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 15:52:59 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:26:52 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_env(char *name)
 	}
 	if (!my_env || !my_env[i])
 		return (ft_strdup(""));
-	ft_strdup(env_value);
+	env_value = odd_quotes(env_value);
 	return (env_value);
 }
 

@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/14 18:19:38 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:28:13 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ pid_t	execute_pipe(t_tree *root, int *current_pipe, int prev_pipe,
 
 	if (pipe(current_pipe) == -1)
 		clean_and_exit("pipe");
-	*is_last = false;
+	*is_last = FALSE;
 	execute_tree(root->left, prev_pipe, current_pipe, *is_last);
 	prev_pipe = current_pipe[0];
 	if (root->right && root->right->node->cmd_type == T_COMMAND)
-		*is_last = true;
+		*is_last = TRUE;
 	last_cpid = execute_tree(root->right, prev_pipe, current_pipe, *is_last);
 	close_fd(prev_pipe);
 	return (last_cpid);

@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/14 18:05:33 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:24:07 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	wait_for_children(pid_t last_cpid)
 	exit_code = 0;
 	status = 0;
 	if (waitpid(last_cpid, &status, 0) == -1)
-		return (-1);
+		return (expander()->exit_code);
 	while (wait(NULL) > 0)
 		;
 	if (WIFEXITED(status))
@@ -40,18 +40,20 @@ void	clean_child_ressources(int prev_pipe, int *current_pipe)
 
 int	get_in_out_file(t_redir **redi, int type)
 {
-	int		file;
-	int		prev;
 	t_redir	*redir;
 
+	int (file), (prev);
 	prev = -1;
 	file = -1;
 	redir = *redi;
 	while (redir)
 	{
-		if (redir->type == type)
+		if (redir->type == type
+			|| (type == INPUT_FILE && redir->type == HERE_DOC))
 		{
 			close_fd(prev);
+			if (type == INPUT_FILE && redir->type == HERE_DOC)
+				redir->file_name = handle_heredoc(redir->file_name);
 			file = open(redir->file_name, redir->open_mode, 0666);
 			if (file == -1)
 			{

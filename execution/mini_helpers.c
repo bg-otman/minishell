@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:47:55 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/14 18:20:34 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:24:51 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,4 @@ void	clean_and_exit(const char *error)
 	perror(error);
 	free_garbage();
 	exit(EXIT_FAILURE);
-}
-
-// remove when done printing
-void	print_tree(t_tree *root, int space)
-{
-	if (root == NULL)
-		return ;
-
-	space += 10;
-
-	print_tree(root->right, space);
-
-	for (int i = 10; i < space; i++)
-		printf(" ");
-	printf("->%s\n", root->node->cmd);
-
-	print_tree(root->left, space);
 }

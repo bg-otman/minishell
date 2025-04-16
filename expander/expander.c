@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 15:57:16 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:20:40 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ char	*remove_quotes(char *token)
 	{
 		if (!quote && (token[i] == '\'' || token[i] == '\"'))
 			quote = token[i++];
-		else if (quote && (token[i] == quote))
-		{
+		else if (quote && (token[i] == quote) && token[i++])
 			quote = 0;
-			i++;
-		}
+		else if (token[i] == '\\' && token[i + 1]
+			&& (token[i + 1] == '\"' || token[i + 1] == '\''))
+			str[j++] = token[++i];
 		else
 			str[j++] = token[i++];
 	}

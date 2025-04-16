@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:43:29 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/14 18:11:44 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:27:37 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	launch_shell(t_shell *tokens)
 	
 	exit_code = 0;
 	prev_pipe = -1;
-	while (true)
+	while (TRUE)
 	{
 		if (!exit_code)
 			line = readline(PROMPT);
@@ -31,6 +31,7 @@ void	launch_shell(t_shell *tokens)
 		if (!ft_strcmp(line, "exit") || !line)
 		{
 			fdprintf(1, "exit\n");
+			expander()->exit_code = exit_code;
 			break ;
 		}
 		add_history(line);
@@ -46,7 +47,7 @@ void	launch_shell(t_shell *tokens)
 		}
 		root = parser(tokens);
 		// print_tree(root, 0);
-		last_cpid = execute_tree(root, prev_pipe, NULL, false);
+		last_cpid = execute_tree(root, prev_pipe, NULL, FALSE);
 		exit_code =  wait_for_children(last_cpid);
 		if (exit_code == -1)
 			exit_code = expander()->exit_code;
@@ -55,6 +56,7 @@ void	launch_shell(t_shell *tokens)
 		printf("exit_status [%d]\n", exit_code);
 		free(line);
 	}
+	rl_clear_history();
 	free(line);
 }
 
@@ -68,6 +70,6 @@ int main(int ac, char **av, char **env)
 	add_env();
 	launch_shell(&tokens);
 	free_garbage();
-	return (0);
+	return (expander()->exit_code);
 }
 

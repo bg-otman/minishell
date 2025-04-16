@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/14 17:19:55 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:28:36 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	check_paths(t_shell *cmd, char **paths)
 		tmp = ft_strjoin(tmp, cmd->cmd);
 		if (access(tmp, F_OK) == 0)
 		{
-			cmd->is_exist = true;
+			cmd->is_exist = TRUE;
 			cmd->cmd = tmp;
 			break ;
 		}
@@ -54,8 +54,51 @@ void	get_cmd_path(t_shell *cmd)
 	}
 	if (ft_search(cmd->cmd, '/'))
 	{
-		cmd->is_exist = true;
+		cmd->is_exist = TRUE;
 		return ;
 	}
 	check_paths(cmd, paths);
+}
+
+char	*generate_tmp_name(void)
+{
+	int		i;
+	char	*num;
+	char	*filename;
+	char	*base;
+
+	i = 1;
+	base = "/tmp/.here_doc";
+	while (TRUE)
+	{
+		num = ft_itoa(i);
+		filename = ft_strjoin(base, num);
+		if (access(filename, F_OK) != 0)
+			return (filename);
+		i++;
+	}
+}
+
+char	*handle_heredoc(char *lim)
+{
+	char	*tmp;
+	char	*limiter;
+	char	*here_doc_file;
+	int		fd;
+
+	here_doc_file = ft_strdup(generate_tmp_name());
+	fd = open(here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (fd == -1)
+		clean_and_exit("open here_doc ");
+	limiter = ft_strjoin(lim, "\n");
+	fdprintf(STDOUT_FILENO, "> ");
+	tmp = get_next_line(STDIN_FILENO);
+	while (tmp && ft_strcmp(tmp, limiter))
+	{
+		write(fd, tmp, ft_strlen(tmp));
+		fdprintf(STDOUT_FILENO, "> ");
+		tmp = get_next_line(STDIN_FILENO);
+	}
+	close(fd);
+	return (here_doc_file);
 }

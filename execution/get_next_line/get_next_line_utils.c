@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 16:00:27 by obouizi           #+#    #+#             */
-/*   Updated: 2024/11/19 16:18:42 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 12:24:51 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*ft_strdup(const char *s1)
 
 	i = 0;
 	s_len = ft_slen(s1);
-	ptr = (char *) malloc(s_len + 1);
+	ptr = (char *) ft_malloc(s_len + 1);
 	if (ptr == NULL)
 		return (NULL);
 	while (i < s_len)
@@ -69,7 +69,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	s1_len = ft_slen(s1);
 	s2_len = ft_slen(s2);
-	ptr = (char *) malloc((s1_len + s2_len) + 1);
+	ptr = (char *) ft_malloc((s1_len + s2_len) + 1);
 	if (ptr == NULL)
 		return (NULL);
 	ft_memcpy(ptr, s1, s1_len);

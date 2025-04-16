@@ -6,15 +6,14 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 16:01:23 by obouizi           #+#    #+#             */
-/*   Updated: 2025/01/24 09:28:52 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 12:29:47 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <unistd.h>
-# include <stdlib.h>
+# include "../../Libft/libft.h"
 # include <limits.h>
 
 # ifndef BUFFER_SIZE

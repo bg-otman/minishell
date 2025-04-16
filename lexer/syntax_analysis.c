@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 16:43:42 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:33:14 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	get_file(t_shell *shell, t_token *token)
 	new->file_name = token->next->value;
 	if (!ft_strcmp(token->value, ">"))
 	{
-		new->open_mode = O_TRUNC | O_CREAT | O_WRONLY;
+		new->open_mode = O_CREAT | O_WRONLY | O_TRUNC;
 		new->type = OUTPUT_FILE;
 	}
 	if (!ft_strcmp(token->value, ">>"))
@@ -72,8 +72,8 @@ void	get_file(t_shell *shell, t_token *token)
 	}
 	if (!ft_strcmp(token->value, "<<"))
 	{
-		new->open_mode = O_APPEND;
-		new->type = INPUT_FILE;
+		new->open_mode = O_RDONLY;
+		new->type = HERE_DOC;
 	}
 	if (!ft_strcmp(token->value, "<"))
 	{
