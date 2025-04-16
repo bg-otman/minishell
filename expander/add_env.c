@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:03:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 19:09:00 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/16 21:41:55 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ char	*call_heredoc(t_redir *redir)
 		tmp = get_next_line(fd);
 	}
 	close(fd);
+	unlink(redir->file_name);
 	close(fd1);
 	return (file);
 }

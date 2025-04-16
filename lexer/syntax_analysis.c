@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 19:10:19 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/16 21:37:14 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	get_file(t_shell *shell, t_token *token)
 		if (!ft_strchr(new->file_name, '\"')
 			&& !ft_strchr(new->file_name, '\''))
 			new->expand = 1;
-		new->type = HERE_DOC;
+		new->file_name = call_heredoc(new);
+		new->type = INPUT_FILE;
 	}
 	if (!ft_strcmp(token->value, "<"))
 		new->open_mode = O_RDONLY;
