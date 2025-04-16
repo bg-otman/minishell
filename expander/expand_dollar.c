@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 18:26:52 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/16 19:06:36 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,9 @@ char	*get_var(char *str)
 	while (str[i] && str[i] != '$')
 		i++;
 	start = i++;
-	if (str[i] && str[i] == '{')
-	{
-		start++;
-		i++;
-	}
 	while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
 			&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-			&& str[i] != ' '))
+			&& str[i] != ' ' && str[i] != '\n'))
 		i++;
 	return (ft_substr(str, start + 1, i - start - 1));
 }
@@ -80,7 +75,7 @@ char	*get_end(char *str)
 	i++;
 	while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
 			&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-			&& str[i] != ' '))
+			&& str[i] != ' ' && str[i] != '\n'))
 		i++;
 	return (ft_substr(str, i, ft_strlen(str) - i));
 }

@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 16:22:02 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/16 19:10:19 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ void	get_file(t_shell *shell, t_token *token)
 	}
 	if (!ft_strcmp(token->value, "<<"))
 	{
-		new->open_mode = O_APPEND;
-		new->type = INPUT_FILE;
+		new->open_mode = O_RDONLY;
+		if (!ft_strchr(new->file_name, '\"')
+			&& !ft_strchr(new->file_name, '\''))
+			new->expand = 1;
+		new->type = HERE_DOC;
 	}
 	if (!ft_strcmp(token->value, "<"))
-	{
 		new->open_mode = O_RDONLY;
-		new->type = INPUT_FILE;
-	}
 }
 
 void	get_types(t_shell *shell)

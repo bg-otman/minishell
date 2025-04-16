@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:03:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 17:52:03 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/16 19:09:00 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,51 @@ char	*odd_quotes(char *env_value)
 	}
 	new[j] = 0;
 	return (new);
+}
+
+char	*expand_line(char *line)
+{
+	char	*env_value;
+	char	*start;
+	char	*end;
+	char	*tmp;
+
+	while (ft_strchr(line, '$'))
+	{
+		start = get_start(line);
+		end = get_end(line);
+		tmp = get_var(line);
+		env_value = get_env(tmp);
+		tmp = ft_strjoin(start, env_value);
+		line = ft_strjoin(tmp, end);
+	}
+	return (line);
+}
+
+char	*call_heredoc(t_redir *redir)
+{
+	char	*file;
+	int		fd;
+	int		fd1;
+	char	*tmp;
+
+	if (!redir->expand)
+		return (handle_heredoc(redir->file_name));
+	redir->file_name = handle_heredoc(redir->file_name);
+	file = ft_strdup(generate_tmp_name());
+	fd = open(redir->file_name, redir->open_mode, 0666);
+	fd1 = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (fd == -1 || fd1 == -1)
+		clean_and_exit("open here_doc ");
+	tmp = get_next_line(fd);
+	while (tmp)
+	{
+		if (ft_strchr(tmp, '$'))
+			tmp = expand_line(tmp);
+		write(fd1, tmp, ft_strlen(tmp));
+		tmp = get_next_line(fd);
+	}
+	close(fd);
+	close(fd1);
+	return (file);
 }

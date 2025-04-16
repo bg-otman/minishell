@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:58:54 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/15 09:29:49 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/16 17:18:33 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ int	echo(char **args)
 	int	i;
 	int	nl;
 
-	if (!args)
+	i = 1;
+	if (!args[1])
 		return (printf("\n"), 0);
-	i = 0;
 	nl = options(args, &i);
 	while (args[i])
 	{
