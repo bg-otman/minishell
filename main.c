@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:43:29 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 15:27:37 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 16:55:06 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ int main(int ac, char **av, char **env)
 	launch_shell(&tokens);
 	free_garbage();
 	return (expander()->exit_code);
+	return (0);
 }
 

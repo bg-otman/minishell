@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 15:24:07 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 19:16:46 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	get_in_out_file(t_redir **redi, int type)
 		{
 			close_fd(prev);
 			if (type == INPUT_FILE && redir->type == HERE_DOC)
-				redir->file_name = handle_heredoc(redir->file_name);
+				redir->file_name = call_heredoc(redir);
 			file = open(redir->file_name, redir->open_mode, 0666);
 			if (file == -1)
 			{
@@ -91,4 +91,11 @@ int	get_redirections(t_shell *cmd, int *in_file, int *out_file)
 	if (*out_file != -1 && dup2(*out_file, STDOUT_FILENO) == -1)
 		clean_and_exit("dup2");
 	return (0);
+}
+
+void	call_builtins(t_shell *cmd)
+{
+	// if (!ft_strcmp(cmd->cmd, "cd"))
+	// 	execute_cd(cmd);
+	(void) cmd;
 }

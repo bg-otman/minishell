@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 15:51:02 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 18:01:32 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ char	*handle_heredoc(char *lim)
 		write(fd, tmp, ft_strlen(tmp));
 		fdprintf(STDOUT_FILENO, "> ");
 		tmp = get_next_line(STDIN_FILENO);
-		if (!tmp)
-			fdprintf(STDOUT_FILENO, "\n%s (wanted `%s')\n", warning_msg, lim);
 	}
+	if (!tmp)
+		fdprintf(STDOUT_FILENO, "\n%s (wanted `%s')\n", warning_msg, lim);
 	close(fd);
 	return (here_doc_file);
 }

@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 15:28:13 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:59:38 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ pid_t	process_command(t_shell *cmd, int prev_pipe, int *current_pipe,
 {
 	pid_t	process_id;
 
+	if (!ft_strcmp(cmd->cmd, "cd"))
+	{
+		execute_cd(cmd);
+		return (-1);
+	}
 	process_id = fork();
 	if (process_id == -1)
 		clean_and_exit("fork");
