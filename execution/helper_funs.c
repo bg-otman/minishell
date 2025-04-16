@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 15:28:36 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:51:02 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,13 @@ char	*generate_tmp_name(void)
 char	*handle_heredoc(char *lim)
 {
 	char	*tmp;
+	char	*warning_msg;
 	char	*limiter;
 	char	*here_doc_file;
 	int		fd;
 
 	here_doc_file = ft_strdup(generate_tmp_name());
+	warning_msg = "minishell: warning: here-document delimited by end-of-file";
 	fd = open(here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
 		clean_and_exit("open here_doc ");
@@ -98,6 +100,8 @@ char	*handle_heredoc(char *lim)
 		write(fd, tmp, ft_strlen(tmp));
 		fdprintf(STDOUT_FILENO, "> ");
 		tmp = get_next_line(STDIN_FILENO);
+		if (!tmp)
+			fdprintf(STDOUT_FILENO, "\n%s (wanted `%s')\n", warning_msg, lim);
 	}
 	close(fd);
 	return (here_doc_file);
