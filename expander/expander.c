@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 18:20:40 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 13:18:12 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,25 +98,6 @@ void	add_words(char **new, t_token *old, t_data *data)
 	}
 }
 
-void	replace_word(char *new, t_token *old, t_data *data)
-{
-	t_token	*tmp;
-	t_token	**tokens;
-
-	tokens = data->tokens;
-	tmp = *tokens;
-	while (tmp)
-	{
-		if (tmp == old)
-		{
-			tmp->value = new;
-			return ;
-		}
-		tmp = tmp->next;
-	}
-	data->tokens = tokens;
-}
-
 int	expand_tokens(t_data *data)
 {
 	t_token	*tmp;
@@ -126,7 +107,7 @@ int	expand_tokens(t_data *data)
 	tmp = *(data->tokens);
 	while (tmp)
 	{
-		if (ft_strchr(tmp->value, '$') && (tmp->state == DEFAULT
+		if (tmp->value && ft_strchr(tmp->value, '$') && (tmp->state == DEFAULT
 				|| tmp->state == DOUBLE_QUOTE) && ft_strlen(tmp->value) != 1)
 		{
 			if (expand_dollar(data, tmp))

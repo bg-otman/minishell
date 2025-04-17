@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:54:56 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 21:37:14 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 13:26:33 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ char	**add_to_array(char **arr, char *element)
 		new_arr[j] = ft_strdup(arr[j]);
 		j++;
 	}
-	new_arr[j++] = ft_strdup(element);
+	if (element)
+		new_arr[j++] = ft_strdup(element);
 	new_arr[j] = NULL;
 	return (new_arr);
 }

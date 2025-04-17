@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/14 18:20:11 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 13:15:03 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ void	join_tokens(t_data *data)
 	{
 		if (tmp->cat == 0 && tmp->next)
 		{
-			value = ft_strjoin(tmp->value, tmp->next->value);
+			if (!tmp->value)
+				value = tmp->next->value;
+			else
+				value = ft_strjoin(tmp->value, tmp->next->value);
 			tmp->value = value;
 			tmp->cat = tmp->next->cat;
 			remove_token(tokens, tmp->next);

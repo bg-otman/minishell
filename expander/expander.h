@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:51:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 18:37:28 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 13:17:51 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 int		expand_dollar(t_data *data, t_token *token);
 void	expand_wildcard(t_data *data);
 void	remove_token(t_token **tokens, t_token *token);
-void	replace_word(char *new, t_token *old, t_data *data);
 void	add_words(char **new, t_token *old, t_data *data);
 int		add_default(char **new, t_token *old, t_data *data);
 char	**add_to_array(char **arr, char *element);

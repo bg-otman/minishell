@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:00:15 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/12 13:23:58 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 12:44:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	expand_wildcard(t_data *data)
 	tmp = *(data->tokens);
 	while (tmp)
 	{
-		if (ft_strchr(tmp->value, '*') && tmp->state == DEFAULT)
+		if (tmp->value && ft_strchr(tmp->value, '*') && tmp->state == DEFAULT)
 		{
 			arr = compare_pattern(tmp->value);
 			if (arr[0])

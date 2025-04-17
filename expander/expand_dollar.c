@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 19:06:36 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 13:17:30 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,13 @@ int	expand_dollar(t_data *data, t_token *token)
 	tmp = ft_strjoin(start, env_value);
 	env_value = ft_strjoin(tmp, end);
 	if (!env_value || !env_value[0])
-		return (remove_token(data->tokens, token), 0);
+	{
+		token->value = NULL;
+		return (0);
+	}
 	if (token->state == DEFAULT)
 		return (add_default(ft_split(env_value, ' '), token, data));
 	else
-		replace_word(env_value, token, data);
+		token->value = env_value;
 	return (0);
 }
