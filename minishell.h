@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 19:17:12 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/17 15:25:55 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,21 @@ int					get_redirections(t_shell *cmd, int *in_file, int *out_file);
 void				get_cmd_path(t_shell *cmd);
 void				check_paths(t_shell *cmd, char **paths);
 char				*handle_heredoc(char *lim);
-void				execute_cd(t_shell *cmd);
 char				*generate_tmp_name(void);
+void				execute_cd(t_shell *cmd);
+void				execute_pwd(t_shell *cmd);
+void				execute_echo(char **args);
+void				execute_env(char **args);
 // helper functions
 int					is_builtin(char *cmd);
 int					fdprintf(int fd, const char *str, ...);
+int					count_args(char **arr);
 void				clean_and_exit(const char *error);
 void				init_pipe(int *pipe);
 void				close_fd(int fd);
 void				clean_child_ressources(int prev_pipe, int *current_pipe);
 void				get_exit_code(char *cmd);
 char				*call_heredoc(t_redir *redir);
+void				call_builtins(t_shell *cmd);
 
 #endif

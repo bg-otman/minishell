@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:47:55 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 15:24:51 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:38:12 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,12 @@ void	init_pipe(int *pipe)
 
 int	is_builtin(char *cmd)
 {
-	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd,
-			"pwd") || !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
-		|| !ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "exit"));
+	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "pwd")
+		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
+		|| !ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "exit"))
+		return (TRUE);
+	else
+		return (FALSE);
 }
 
 void	close_fd(int fd)

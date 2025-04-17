@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 20:59:24 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 12:24:36 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:45:24 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ ssize_t	read_data(int fd, char **buffer)
 	{
 		if (*buffer)
 		{
-			free(*buffer);
 			*buffer = NULL;
 			return (-1);
 		}
@@ -55,7 +54,6 @@ ssize_t	read_data(int fd, char **buffer)
 	bytes_read = read(fd, *buffer, BUFFER_SIZE);
 	if (bytes_read <= 0)
 	{
-		free(*buffer);
 		*buffer = NULL;
 		return (bytes_read);
 	}
@@ -73,19 +71,15 @@ char	*allocate_and_free(char **buffer)
 	line = allocate_line(*buffer);
 	if (!line)
 	{
-		free(*buffer);
 		*buffer = NULL;
 		return (NULL);
 	}
 	temp = ft_strdup(&(*buffer)[ft_slen(line)]);
 	if (!temp)
 	{
-		free(line);
-		free(*buffer);
 		*buffer = NULL;
 		return (NULL);
 	}
-	free(*buffer);
 	*buffer = temp;
 	return (line);
 }
@@ -96,18 +90,15 @@ char	*get_last_line(char **buffer, ssize_t bytes_read)
 
 	if (bytes_read == -1)
 	{
-		free(*buffer);
 		*buffer = NULL;
 		return (NULL);
 	}
 	if (*buffer && **buffer)
 	{
 		line = ft_strdup(*buffer);
-		free(*buffer);
 		*buffer = NULL;
 		return (line);
 	}
-	free(*buffer);
 	*buffer = NULL;
 	return (NULL);
 }
@@ -132,8 +123,6 @@ char	*get_next_line(int fd)
 		if (byte_read <= 0)
 			return (get_last_line(&buffer, byte_read));
 		ptr = ft_strjoin(buffer, temp);
-		free(buffer);
-		free(temp);
 		if (!ptr)
 			return (NULL);
 		buffer = ptr;

@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 17:59:38 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:28:59 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ void	execute_command(t_shell *cmd, int prev_pipe, int *current_pipe,
 	close_fd(out_file);
 	if (!cmd->cmd)
 		exit(EXIT_SUCCESS);
-	if (cmd->is_exist)
+	if (is_builtin(cmd->args[0]))
+		call_builtins(cmd);
+	else if (cmd->is_exist)
 		execve(cmd->cmd, cmd->args, expander()->my_env);
 	get_exit_code(cmd->cmd);
 }

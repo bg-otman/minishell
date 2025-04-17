@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 19:16:46 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/17 15:24:10 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,54 +38,45 @@ void	clean_child_ressources(int prev_pipe, int *current_pipe)
 	}
 }
 
-int	get_in_out_file(t_redir **redi, int type)
+int	get_in_out_file(t_redir *redir, int *in_file, int *out_file)
 {
-	t_redir	*redir;
-
-	int (file), (prev);
-	prev = -1;
-	file = -1;
-	redir = *redi;
+	int (fd);
+	fd = -1;
 	while (redir)
 	{
-		if (redir->type == type
-			|| (type == INPUT_FILE && redir->type == HERE_DOC))
+		fd = open(redir->file_name, redir->open_mode, 0666);
+		if (fd == -1)
 		{
-			close_fd(prev);
-			if (type == INPUT_FILE && redir->type == HERE_DOC)
-				redir->file_name = call_heredoc(redir);
-			file = open(redir->file_name, redir->open_mode, 0666);
-			if (file == -1)
-			{
-				*redi = redir;
-				return (-2);
-			}
-			prev = file;
+			fdprintf(2, "minishell: %s: %s\n", redir->file_name,
+				strerror(errno));
+			return (1);
+		}
+		if (!redir->type)
+		{
+			close_fd(*in_file);
+			*in_file = fd;
+		}
+		else
+		{
+			close_fd(*out_file);
+			*out_file = fd;
 		}
 		redir = redir->next;
 	}
-	return (file);
+	return (0);
 }
 
 int	get_redirections(t_shell *cmd, int *in_file, int *out_file)
 {
 	t_redir	*redir;
 
+	*in_file = -1;
+	*out_file = -1;
 	if (!cmd->redirections)
-	{
-		*in_file = -1;
-		*out_file = -1;
 		return (0);
-	}
 	redir = cmd->redirections;
-	*in_file = get_in_out_file(&redir, INPUT_FILE);
-	if (*in_file == -2)
-		return (fdprintf(2, "minishell: %s: No such file or directory\n",
-				redir->file_name), 1);
-	*out_file = get_in_out_file(&redir, OUTPUT_FILE);
-	if (*out_file == -2)
-		return (fdprintf(2, "minishell: %s: Permission denied\n",
-				redir->file_name), 1);
+	if (get_in_out_file(redir, in_file, out_file))
+		return (1);
 	if (*in_file != -1 && dup2(*in_file, STDIN_FILENO) == -1)
 		clean_and_exit("dup2");
 	if (*out_file != -1 && dup2(*out_file, STDOUT_FILENO) == -1)
@@ -95,7 +86,10 @@ int	get_redirections(t_shell *cmd, int *in_file, int *out_file)
 
 void	call_builtins(t_shell *cmd)
 {
-	// if (!ft_strcmp(cmd->cmd, "cd"))
-	// 	execute_cd(cmd);
-	(void) cmd;
+	if (!ft_strcmp(cmd->args[0], "pwd"))
+		execute_pwd(cmd);
+	else if (!ft_strcmp(cmd->args[0], "echo"))
+		execute_echo(cmd->args);
+	else if (!ft_strcmp(cmd->args[0], "env"))
+		execute_env(cmd->args);
 }

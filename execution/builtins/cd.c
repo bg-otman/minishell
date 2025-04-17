@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:33:15 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 19:07:14 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/17 15:12:41 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int	cd_too_many_args(char **args)
 		perror("cd");
 		return (1);
 	}
+	
 	return (0);
 }
 
