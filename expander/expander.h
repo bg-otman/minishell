@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:51:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 13:17:51 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 19:08:15 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ char	*get_end(char *str);
 char	*get_var(char *str);
 char	*get_start(char *str);
 char	*get_env(char *name);
+void	escaped_char(t_token *token);
 
 #endif

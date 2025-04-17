@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 13:18:12 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 19:06:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ char	*remove_quotes(char *token)
 			quote = token[i++];
 		else if (quote && (token[i] == quote) && token[i++])
 			quote = 0;
-		else if (token[i] == '\\' && token[i + 1]
-			&& (token[i + 1] == '\"' || token[i + 1] == '\''))
-			str[j++] = token[++i];
+		else if (token[i] == '\\' && (token[i + 1] == '\"'
+				|| token[i + 1] == '\'' || token[i + 1] == '\\') && i++)
+			str[j++] = token[i++];
 		else
 			str[j++] = token[i++];
 	}
@@ -98,6 +98,18 @@ void	add_words(char **new, t_token *old, t_data *data)
 	}
 }
 
+void	handle_odd_quotes(t_token *tmp)
+{
+	while (tmp)
+	{
+		if (tmp->value && (ft_strchr(tmp->value, '\\')
+				&& (ft_strchr(tmp->value, '\'')
+					|| ft_strchr(tmp->value, '\"'))))
+			escaped_char(tmp);
+		tmp = tmp->next;
+	}
+}
+
 int	expand_tokens(t_data *data)
 {
 	t_token	*tmp;
@@ -105,6 +117,7 @@ int	expand_tokens(t_data *data)
 	if (!data->tokens)
 		return (0);
 	tmp = *(data->tokens);
+	handle_odd_quotes(tmp);
 	while (tmp)
 	{
 		if (tmp->value && ft_strchr(tmp->value, '$') && (tmp->state == DEFAULT
