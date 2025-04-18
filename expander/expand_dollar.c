@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 13:17:30 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/18 19:57:32 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,44 @@ char	*get_start(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != '$')
-		i++;
-	return (ft_substr(str, 0, i));
+	while (str[i])
+	{
+		while (str[i] && str[i] != '$')
+			i++;
+		if (!str[i + 1] || str[i + 1] == '\\' || str[i + 1] == '\''
+			|| str[i + 1] == '$' || str[i + 1] == '/'
+			|| str[i + 1] == '!' || str[i + 1] == '\"'
+			|| str[i + 1] == ' ' || str[i + 1] == '\n')
+			i++;
+		else
+			return (ft_substr(str, 0, i));
+	}
+	return (NULL);
 }
 
 char	*get_var(char *str)
 {
-	int	i;
-	int	start;
+	int		i;
+	int		start;
+	char	*tmp;
 
 	i = 0;
-	while (str[i] && str[i] != '$')
-		i++;
-	start = i++;
-	while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
-			&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-			&& str[i] != ' ' && str[i] != '\n'))
-		i++;
-	return (ft_substr(str, start + 1, i - start - 1));
+	while (str[i])
+	{
+		while (str[i] && str[i] != '$')
+			i++;
+		start = i++;
+		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
+				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
+				&& str[i] != ' ' && str[i] != '\n'))
+			i++;
+		tmp = ft_substr(str, start + 1, i - start - 1);
+		if (!tmp[0])
+			i++;
+		else
+			return (tmp);
+	}
+	return (NULL);
 }
 
 char	*get_end(char *str)
@@ -70,14 +89,26 @@ char	*get_end(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != '$')
+	while (str[i])
+	{
+		while (str[i] && str[i] != '$')
+			i++;
 		i++;
-	i++;
-	while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
-			&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-			&& str[i] != ' ' && str[i] != '\n'))
-		i++;
-	return (ft_substr(str, i, ft_strlen(str) - i));
+		if (!str[i + 1] || str[i + 1] == '\\' || str[i + 1] == '\''
+			|| str[i + 1] == '$' || str[i + 1] == '/'
+			|| str[i + 1] == '!' || str[i + 1] == '\"'
+			|| str[i + 1] == ' ' || str[i + 1] == '\n')
+		{
+			i++;
+			continue ;
+		}
+		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
+				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
+				&& str[i] != ' ' && str[i] != '\n'))
+			i++;
+		return (ft_substr(str, i, ft_strlen(str) - i));
+	}
+	return (NULL);
 }
 
 int	expand_dollar(t_data *data, t_token *token)
@@ -88,11 +119,13 @@ int	expand_dollar(t_data *data, t_token *token)
 	char	*tmp;
 
 	tmp = get_var(token->value);
+	if (!tmp)
+		return (0);
 	env_value = get_env(tmp);
 	start = get_start(token->value);
 	end = get_end(token->value);
-	if (!end)
-		return (1);
+	if (!end || !start)
+		return (0);
 	tmp = ft_strjoin(start, env_value);
 	env_value = ft_strjoin(tmp, end);
 	if (!env_value || !env_value[0])

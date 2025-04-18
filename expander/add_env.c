@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:03:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 16:21:59 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/18 19:22:07 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*expand_line(char *line)
 	char	*end;
 	char	*tmp;
 
-	while (ft_strchr(line, '$'))
+	while (ft_strchr(line, '$') && get_var(line))
 	{
 		start = get_start(line);
 		end = get_end(line);
@@ -104,7 +104,7 @@ char	*call_heredoc(t_redir *redir)
 	tmp = get_next_line(fd);
 	while (tmp)
 	{
-		if (ft_strchr(tmp, '$'))
+		if (ft_strchr(tmp, '$') && get_var(tmp))
 			tmp = expand_line(tmp);
 		write(fd1, tmp, ft_strlen(tmp));
 		tmp = get_next_line(fd);

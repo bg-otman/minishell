@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 19:06:02 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/18 19:20:12 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	expand_tokens(t_data *data)
 	while (tmp)
 	{
 		if (tmp->value && ft_strchr(tmp->value, '$') && (tmp->state == DEFAULT
-				|| tmp->state == DOUBLE_QUOTE) && ft_strlen(tmp->value) != 1)
+				|| tmp->state == DOUBLE_QUOTE) && get_var(tmp->value))
 		{
 			if (expand_dollar(data, tmp))
 				return (1);
