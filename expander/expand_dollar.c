@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/18 19:57:32 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/18 21:14:56 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,13 @@ char	*get_end(char *str)
 		while (str[i] && str[i] != '$')
 			i++;
 		i++;
-		if (!str[i + 1] || str[i + 1] == '\\' || str[i + 1] == '\''
+		if (str[i + 1] && (str[i + 1] == '\\' || str[i + 1] == '\''
 			|| str[i + 1] == '$' || str[i + 1] == '/'
 			|| str[i + 1] == '!' || str[i + 1] == '\"'
-			|| str[i + 1] == ' ' || str[i + 1] == '\n')
+			|| str[i + 1] == ' ' || str[i + 1] == '\n'))
 		{
 			i++;
-			continue ;
+			continue;
 		}
 		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
 				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
