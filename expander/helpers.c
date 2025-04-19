@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:07:49 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 19:08:07 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/19 12:51:36 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,41 @@ void	escaped_char(t_token *token)
 	}
 	new[j] = 0;
 	token->value = new;
+}
+
+pid_t	execute_sub(t_tree *root, int prev_pipe, int *curr_pipe, int is_last)
+{
+	pid_t	last_cpid;
+
+	int (in_file), (out_file), (in), (out);
+	in = dup(0);
+	out = dup(1);
+	get_redirections(root->node, &in_file, &out_file);
+	root->node->redirections = NULL;
+	last_cpid = execute_tree(root, prev_pipe, curr_pipe, is_last);
+	if (in_file != -1)
+		dup2(in, STDIN_FILENO);
+	if (out_file != -1)
+		dup2(out, STDOUT_FILENO);
+	close_fd(in);
+	close_fd(out);
+	close_fd(in_file);
+	close_fd(out_file);
+	return (last_cpid);
+}
+
+void	group_redir(t_redir *redir, t_tree *root)
+{
+	t_redir	*head;
+
+	head = redir;
+	if (root->node->cmd_type == T_LOGICAL_OP || root->node->cmd_type == T_PIPE)
+		root->node->redirections = redir;
+	else
+	{
+		while (redir->next)
+			redir = redir->next;
+		redir->next = root->node->redirections;
+		root->node->redirections = head;
+	}
 }

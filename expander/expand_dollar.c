@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/18 21:14:56 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/19 12:59:48 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*get_start(char *str)
 	return (NULL);
 }
 
-char	*get_var(char *str)
+char	*get_var(char *str, int cat)
 {
 	int		i;
 	int		start;
@@ -73,12 +73,12 @@ char	*get_var(char *str)
 		start = i++;
 		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
 				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-				&& str[i] != ' ' && str[i] != '\n'))
+				&& str[i] != ' ' && str[i] != '\n' && !ft_isdigit(str[i - 1])))
 			i++;
 		tmp = ft_substr(str, start + 1, i - start - 1);
-		if (!tmp[0])
+		if (!tmp[0] && cat && !ft_strchr(str, '\'') && !ft_strchr(str, '\"'))
 			i++;
-		else
+		else if (tmp[0] || (!ft_strchr(str, '\'') && !ft_strchr(str, '\"')))
 			return (tmp);
 	}
 	return (NULL);
@@ -95,16 +95,16 @@ char	*get_end(char *str)
 			i++;
 		i++;
 		if (str[i + 1] && (str[i + 1] == '\\' || str[i + 1] == '\''
-			|| str[i + 1] == '$' || str[i + 1] == '/'
-			|| str[i + 1] == '!' || str[i + 1] == '\"'
-			|| str[i + 1] == ' ' || str[i + 1] == '\n'))
+				|| str[i + 1] == '$' || str[i + 1] == '/'
+				|| str[i + 1] == '!' || str[i + 1] == '\"'
+				|| str[i + 1] == ' ' || str[i + 1] == '\n'))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
 				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-				&& str[i] != ' ' && str[i] != '\n'))
+				&& str[i] != ' ' && str[i] != '\n' && !ft_isdigit(str[i - 1])))
 			i++;
 		return (ft_substr(str, i, ft_strlen(str) - i));
 	}
@@ -118,9 +118,9 @@ int	expand_dollar(t_data *data, t_token *token)
 	char	*end;
 	char	*tmp;
 
-	tmp = get_var(token->value);
-	if (!tmp)
-		return (0);
+	tmp = get_var(token->value, token->cat);
+	if (!tmp || !tmp[0])
+		return (remove_token(data->tokens, token, tmp == NULL), 0);
 	env_value = get_env(tmp);
 	start = get_start(token->value);
 	end = get_end(token->value);
