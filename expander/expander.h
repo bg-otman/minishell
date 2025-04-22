@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:51:11 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/19 12:59:23 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/22 17:35:33 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,12 @@
 int		expand_dollar(t_data *data, t_token *token);
 void	expand_wildcard(t_data *data);
 void	remove_token(t_token **tokens, t_token *token, int ignore);
-void	add_words(char **new, t_token *old, t_data *data);
-int		add_default(char **new, t_token *old, t_data *data);
+void	add_words(char **new_, t_token *old, t_data *data);
+int		add_default(char **new_, t_token *old, t_data *data);
 char	**add_to_array(char **arr, char *element);
 char	*odd_quotes(char *env_value);
-char	*get_end(char *str);
-char	*get_var(char *str, int cat);
-char	*get_start(char *str);
-char	*get_env(char *name);
+char	*expand_token(char *value, int cat, t_state state);
 void	escaped_char(t_token *token);
+int		ft_valid(int c);
 
 #endif

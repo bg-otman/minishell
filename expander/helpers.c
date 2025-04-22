@@ -6,11 +6,16 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:07:49 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/19 12:51:36 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/20 17:12:34 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
+
+int	ft_valid(int c)
+{
+	return (ft_isalnum(c) || c == '?');
+}
 
 void	escaped_char(t_token *token)
 {

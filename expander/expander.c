@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/19 10:05:48 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/20 12:27:32 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	handle_odd_quotes(t_token *tmp)
 int	expand_tokens(t_data *data)
 {
 	t_token	*tmp;
+	t_token	*next;
 
 	if (!data->tokens)
 		return (0);
@@ -120,12 +121,13 @@ int	expand_tokens(t_data *data)
 	handle_odd_quotes(tmp);
 	while (tmp)
 	{
+		next = tmp->next;
 		if (tmp->value && ft_strchr(tmp->value, '$') && (tmp->state == DEFAULT
-				|| tmp->state == DOUBLE_QUOTE) && get_var(tmp->value, tmp->cat))
+				|| tmp->state == DOUBLE_QUOTE))
 		{
 			if (expand_dollar(data, tmp))
 				return (1);
-			tmp = *(data)->tokens;
+			tmp = next;
 			continue ;
 		}
 		tmp = tmp->next;

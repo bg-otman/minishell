@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/19 12:59:48 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/20 22:07:15 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*get_env(char *name)
 	my_env = expander()->my_env;
 	if (!ft_strcmp("?", name))
 		return (ft_itoa(expander()->exit_code));
+	if (!ft_strcmp("0", name))
+		return (ft_strdup("minishell"));
 	cmp = ft_strjoin(name, "=");
 	while (my_env && my_env[i])
 	{
@@ -39,95 +41,71 @@ char	*get_env(char *name)
 	return (env_value);
 }
 
-char	*get_start(char *str)
+char	*get_var(char *str, int *i)
 {
-	int	i;
+	int		start;
+	int		j;
 
-	i = 0;
-	while (str[i])
+	start = (*i);
+	j = (*i) + 1;
+	if (ft_isdigit(str[j]) || str[j] == '?' || !ft_isalpha(str[j]))
 	{
-		while (str[i] && str[i] != '$')
-			i++;
-		if (!str[i + 1] || str[i + 1] == '\\' || str[i + 1] == '\''
-			|| str[i + 1] == '$' || str[i + 1] == '/'
-			|| str[i + 1] == '!' || str[i + 1] == '\"'
-			|| str[i + 1] == ' ' || str[i + 1] == '\n')
+		(*i) += 2;
+		return (ft_substr(str, start + 1, (*i) - start -1));
+	}
+	while (str[j++] && ft_isalnum(str[j]))
+		;
+	(*i) = j--;
+	return (ft_substr(str, start + 1, (*i) - start - 1));
+}
+
+char	*add_to_string(char *str, char c, int *i, int *j)
+{
+	char	*new;
+
+	new = ft_malloc(sizeof(char) * 2);
+	new[0] = c;
+	new[1] = 0;
+	str = ft_strjoin(str, new);
+	if (j)
+		(*j)++;
+	if (i)
+		(*i)++;
+	return (str);
+}
+
+char	*expand_token(char *value, int cat, t_state state)
+{
+	char	*new;
+
+	int (i), (j);
+	i = 0;
+	j = 0;
+	new = ft_strdup("");
+	while (value[i])
+	{
+		while (value[i] && value[i] != '$')
+			new = add_to_string(new, value[i], &i, &j);
+		new[j] = 0;
+		if (value[i] == '$' && ft_valid(value[i + 1]))
+		{
+			new = ft_strjoin(new, get_env(get_var(value, &i)));
+			while (new[j++])
+				;
+		}
+		else if (value[i] == '$' && !cat && !state && !value[i + 1])
 			i++;
 		else
-			return (ft_substr(str, 0, i));
+			new = add_to_string(new, value[i], &i, &j);
 	}
-	return (NULL);
-}
-
-char	*get_var(char *str, int cat)
-{
-	int		i;
-	int		start;
-	char	*tmp;
-
-	i = 0;
-	while (str[i])
-	{
-		while (str[i] && str[i] != '$')
-			i++;
-		start = i++;
-		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
-				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-				&& str[i] != ' ' && str[i] != '\n' && !ft_isdigit(str[i - 1])))
-			i++;
-		tmp = ft_substr(str, start + 1, i - start - 1);
-		if (!tmp[0] && cat && !ft_strchr(str, '\'') && !ft_strchr(str, '\"'))
-			i++;
-		else if (tmp[0] || (!ft_strchr(str, '\'') && !ft_strchr(str, '\"')))
-			return (tmp);
-	}
-	return (NULL);
-}
-
-char	*get_end(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		while (str[i] && str[i] != '$')
-			i++;
-		i++;
-		if (str[i + 1] && (str[i + 1] == '\\' || str[i + 1] == '\''
-				|| str[i + 1] == '$' || str[i + 1] == '/'
-				|| str[i + 1] == '!' || str[i + 1] == '\"'
-				|| str[i + 1] == ' ' || str[i + 1] == '\n'))
-		{
-			i++;
-			continue ;
-		}
-		while (str[i] && (str[i] != '\\' && str[i] != '\'' && str[i] != '$'
-				&& str[i] != '/' && str[i] != '!' && str[i] != '\"'
-				&& str[i] != ' ' && str[i] != '\n' && !ft_isdigit(str[i - 1])))
-			i++;
-		return (ft_substr(str, i, ft_strlen(str) - i));
-	}
-	return (NULL);
+	return (new);
 }
 
 int	expand_dollar(t_data *data, t_token *token)
 {
 	char	*env_value;
-	char	*start;
-	char	*end;
-	char	*tmp;
 
-	tmp = get_var(token->value, token->cat);
-	if (!tmp || !tmp[0])
-		return (remove_token(data->tokens, token, tmp == NULL), 0);
-	env_value = get_env(tmp);
-	start = get_start(token->value);
-	end = get_end(token->value);
-	if (!end || !start)
-		return (0);
-	tmp = ft_strjoin(start, env_value);
-	env_value = ft_strjoin(tmp, end);
+	env_value = expand_token(token->value, token->cat, token->state);
 	if (!env_value || !env_value[0])
 	{
 		token->value = NULL;

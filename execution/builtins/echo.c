@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 10:58:54 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 17:18:33 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 15:26:54 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 int	options(char **args, int *i)
 {
@@ -40,14 +40,17 @@ int	options(char **args, int *i)
 	return (nl);
 }
 
-int	echo(char **args)
+void	execute_echo(char **args)
 {
 	int	i;
 	int	nl;
 
 	i = 1;
 	if (!args[1])
-		return (printf("\n"), 0);
+	{
+		fdprintf(1, "\n");
+		exit(EXIT_SUCCESS);
+	}
 	nl = options(args, &i);
 	while (args[i])
 	{
@@ -58,5 +61,5 @@ int	echo(char **args)
 	}
 	if (nl)
 		printf("\n");
-	return (0);
+	exit(EXIT_SUCCESS);
 }
