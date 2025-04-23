@@ -12,6 +12,24 @@
 
 #include "minishell.h"
 
+void	foo(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		expander()->exit_code = 130;
+	}
+}
+
+void	handle_signals(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, foo);
+}
+
 int	ft_readline(t_shell *tokens)
 {
 	char	*line;
@@ -52,7 +70,7 @@ void	launch_shell(t_shell *tokens)
 		if (exit_code == 2)
 			continue ;
 		root = parser(tokens);
-		last_cpid = execute_tree(root, prev_pipe, NULL, FALSE);
+		last_cpid = execute_tree(root);
 		exit_code = wait_for_children(last_cpid);
 		if (exit_code == -1)
 			exit_code = expander()->exit_code;
@@ -68,6 +86,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	handle_signals();
 	expander()->env = env;
 	add_env();
 	launch_shell(&tokens);

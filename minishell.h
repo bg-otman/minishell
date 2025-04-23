@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 17:03:59 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/23 22:57:01 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define TRUE 1
 # define FALSE 0
-# define PROMPT "🤖 \x1B[32m\e[1mminishell \x1B[0m"
-# define B_PROMPT "💀 \x1B[31m\e[1mminishell \x1B[0m"
+# define PROMPT "🤖 \x1B[32m\e[1mminishell ▶️\x1B[0m  "
+# define B_PROMPT "💀 \x1B[31m\e[1mminishell ▶️\x1B[0m  "
 # define INPUT_FILE 0
 # define OUTPUT_FILE 1
 # define SYNTAX_ERROR 2
@@ -75,6 +76,7 @@ typedef struct s_expander
 	char			**my_env;
 	int				ignored;
 	int				exit_code;
+	int				background;
 }					t_expander;
 
 typedef struct s_env
@@ -106,8 +108,7 @@ t_tree				*parser(t_shell *tokens);
 t_tree				*create_node(t_shell *node);
 void				group_redir(t_redir *redir, t_tree *root);
 // execution
-pid_t				execute_tree(t_tree *root, int prev_pipe, int *current_pipe,
-						int is_last);
+pid_t				execute_tree(t_tree *root);
 int					wait_for_children(pid_t last_cpid);
 int					get_redirections(t_shell *cmd, int *in_file, int *out_file);
 void				get_cmd_path(t_shell *cmd);
@@ -121,8 +122,7 @@ void				execute_echo(char **args);
 void				execute_env(char **args);
 void				execute_export(char **args);
 void				execute_unset(char **args);
-pid_t				execute_sub(t_tree *root, int prev_pipe,
-						int *curr_pipe, int is_last);
+pid_t				execute_sub(t_tree *root);
 void				exit_shell(char **args);
 // helper functions
 int					is_builtin(char *cmd);
@@ -135,7 +135,5 @@ void				clean_child_ressources(int prev_pipe, int *current_pipe);
 void				get_exit_code(char *cmd);
 char				*call_heredoc(t_redir *redir);
 void				call_builtins(t_shell *cmd);
-char				*remove_last_dir(char *path);
-void				update_old_pwd(char	*old_path);
 
 #endif

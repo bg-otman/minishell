@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:00:15 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 17:11:20 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/23 15:28:39 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,13 @@ int	match(char *pattern, char *file)
 int	match_pattern(const char *pattern, const char *str)
 {
 	if (*pattern == '\0' && *str == '\0')
-		return (TRUE);
+		return (true);
 	if (*pattern == '*')
 		return (match_pattern(pattern + 1, str) || (*str
 				&& match_pattern(pattern, str + 1)));
 	if (*pattern == *str)
 		return (match_pattern(pattern + 1, str + 1));
-	return (FALSE);
+	return (false);
 }
 
 char	**compare_pattern(char *pattern)
