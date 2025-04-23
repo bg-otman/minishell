@@ -3,23 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:33:15 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/22 19:07:16 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/17 17:09:57 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	count_args(char **arr)
+static char	*handle_relative_path(char *target_path, char *curr_path)
 {
-	int	i;
+	char	**parts;
+	char	*tmp;
+	char	*res;
+	int		i;
+
+	res = ft_strdup(curr_path);
+	parts = ft_split(target_path, '/');
+	i = 0;
+	while (parts && parts[i])
+	{
+		if (!ft_strcmp(parts[i], ".."))
+		{
+			tmp = remove_last_dir(res);
+			res = tmp;
+		}
+		else if (parts[i][0] != '\0' && ft_strcmp(parts[i], "."))
+		{
+			tmp = ft_strjoin(res, "/");
+			res = ft_strjoin(tmp, parts[i]);
+		}
+		i++;
+	}
+	return (res);
+}
+
+void	update_env(char *new_path)
+{
+	char	**env;
+	int		i;
+	char	*tmp;
 
 	i = 0;
-	while (arr && arr[i])
+	env = expander()->my_env;
+	while (env[i])
+	{
+		if (!ft_strncmp(env[i], "PWD=", 4))
+		{
+			if (new_path[0] == '/')
+			{
+				update_old_pwd(&env[i][4]);
+				env[i] = ft_strjoin("PWD=", new_path);
+			}
+			else
+			{
+				update_old_pwd(&env[i][4]);
+				tmp = handle_relative_path(new_path, &env[i][4]);
+				env[i] = ft_strjoin("PWD=", tmp);
+			}
+			return ;
+		}
 		i++;
-	return (i);
+	}
 }
 
 static int	cd_too_many_args(char **args)
@@ -49,6 +95,7 @@ static int	cd_single_arg(char **args)
 		perror("cd");
 		return (1);
 	}
+	update_env(args[0]);
 	return (0);
 }
 

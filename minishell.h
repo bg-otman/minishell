@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 18:49:18 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/23 17:03:59 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 
 # define TRUE 1
 # define FALSE 0
-# define PROMPT "🤖 \x1B[32m\e[1mminishell ▶️ \x1B[0m"
-# define B_PROMPT "💀 \x1B[31m\e[1mminishell ▶️ \x1B[0m"
+# define PROMPT "🤖 \x1B[32m\e[1mminishell \x1B[0m"
+# define B_PROMPT "💀 \x1B[31m\e[1mminishell \x1B[0m"
 # define INPUT_FILE 0
 # define OUTPUT_FILE 1
 # define SYNTAX_ERROR 2
@@ -135,5 +135,7 @@ void				clean_child_ressources(int prev_pipe, int *current_pipe);
 void				get_exit_code(char *cmd);
 char				*call_heredoc(t_redir *redir);
 void				call_builtins(t_shell *cmd);
+char				*remove_last_dir(char *path);
+void				update_old_pwd(char	*old_path);
 
 #endif

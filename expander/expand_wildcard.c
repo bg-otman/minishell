@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:00:15 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 16:33:47 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/23 17:11:20 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,18 @@ int	match(char *pattern, char *file)
 	return (match_midlle(segs, ft_substr(file, start_j, j - start_j + 1)));
 }
 
+int	match_pattern(const char *pattern, const char *str)
+{
+	if (*pattern == '\0' && *str == '\0')
+		return (TRUE);
+	if (*pattern == '*')
+		return (match_pattern(pattern + 1, str) || (*str
+				&& match_pattern(pattern, str + 1)));
+	if (*pattern == *str)
+		return (match_pattern(pattern + 1, str + 1));
+	return (FALSE);
+}
+
 char	**compare_pattern(char *pattern)
 {
 	DIR				*dir;
@@ -98,7 +110,7 @@ char	**compare_pattern(char *pattern)
 	arr = ft_split("     ", ' ');
 	while (files)
 	{
-		if (match(pattern, files->d_name))
+		if (match_pattern(pattern, files->d_name))
 			arr = add_to_array(arr, files->d_name);
 		files = readdir(dir);
 	}
@@ -109,6 +121,7 @@ char	**compare_pattern(char *pattern)
 void	expand_wildcard(t_data *data)
 {
 	t_token	*tmp;
+	t_token	*next;
 	char	**arr;
 
 	if (!data->tokens)
@@ -118,15 +131,11 @@ void	expand_wildcard(t_data *data)
 	{
 		if (tmp->value && ft_strchr(tmp->value, '*') && tmp->state == DEFAULT)
 		{
+			next = tmp->next;
 			arr = compare_pattern(tmp->value);
 			if (arr[0])
 				add_default(arr, tmp, data);
-			else
-			{
-				tmp = tmp->next;
-				continue ;
-			}
-			tmp = *(data->tokens);
+			tmp = next;
 			continue ;
 		}
 		tmp = tmp->next;

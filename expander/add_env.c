@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:03:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 15:44:01 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/22 23:17:06 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,30 @@ t_expander	*expander(void)
 	static t_expander	exp = {0};
 
 	return (&exp);
+}
+
+void	add_shell_level(void)
+{
+	t_expander	*shell;
+
+	int (i), (j);
+	shell = expander();
+	i = 0;
+	while (shell->my_env[i] && ft_strncmp("SHLVL=", shell->my_env[i], 6))
+		i++;
+	if (!shell->my_env[i])
+		shell->my_env = add_to_array(shell->my_env, "SHLVL=1");
+	else
+	{
+		j = ft_atoi(shell->my_env[i] + 6) + 1;
+		if (j >= 1000)
+		{
+			fdprintf(2,
+				"warning: shell level (%d) too high, resetting to 1", j);
+			j = 1;
+		}
+		shell->my_env[i] = ft_strjoin("SHLVL=", ft_itoa(j));
+	}
 }
 
 void	add_env(void)
@@ -32,6 +56,7 @@ void	add_env(void)
 	if (!shell->my_env || (!shell->my_env[0]))
 	{
 		shell->ignored = 1;
+		shell->my_env = add_to_array(shell->my_env, "OLDPWD");
 		shell->my_env = add_to_array(shell->my_env, ft_strjoin("PWD=",
 					getcwd(buff, sizeof(buff))));
 		shell->my_env = add_to_array(shell->my_env, "SHLVL=1");
@@ -40,6 +65,8 @@ void	add_env(void)
 				ft_strjoin("PATH=/usr/local/sbin:/usr/local/bin:",
 					"/usr/sbin:/usr/bin:/sbin:/bin"));
 	}
+	else
+		add_shell_level();
 }
 
 char	*odd_quotes(char *env_value)
