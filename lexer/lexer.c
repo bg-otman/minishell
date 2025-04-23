@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 13:15:03 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/19 12:57:50 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ t_token	*add_group(t_token *token, t_shell **shell)
 	return (token);
 }
 
-void	remove_token(t_token **tokens, t_token *token)
+void	remove_token(t_token **tokens, t_token *token, int ignore)
 {
 	t_token	*tmp;
 	t_token	*prev;
 
-	if (!tokens || !*tokens)
+	if (!tokens || !*tokens || ignore)
 		return ;
 	tmp = *tokens;
 	prev = NULL;
@@ -86,7 +86,7 @@ void	join_tokens(t_data *data)
 				value = ft_strjoin(tmp->value, tmp->next->value);
 			tmp->value = value;
 			tmp->cat = tmp->next->cat;
-			remove_token(tokens, tmp->next);
+			remove_token(tokens, tmp->next, 0);
 		}
 		else
 			tmp = tmp->next;

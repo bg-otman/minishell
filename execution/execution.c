@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/17 13:28:59 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/22 18:49:48 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,8 @@ pid_t	process_command(t_shell *cmd, int prev_pipe, int *current_pipe,
 {
 	pid_t	process_id;
 
-	if (!ft_strcmp(cmd->cmd, "cd"))
-	{
-		execute_cd(cmd);
+	if (exec_builtin(cmd))
 		return (-1);
-	}
 	process_id = fork();
 	if (process_id == -1)
 		clean_and_exit("fork");
@@ -114,7 +111,10 @@ pid_t	execute_tree(t_tree *root, int prev_pipe, int *curr_pipe, int is_last)
 	last_cpid = -1;
 	if (!root)
 		return (-1);
-	if (root->node->cmd_type == T_PIPE)
+	if ((root->node->cmd_type == T_LOGICAL_OP || root->node->cmd_type == T_PIPE)
+		&& root->node->redirections)
+		execute_sub(root, prev_pipe, curr_pipe, is_last);
+	else if (root->node->cmd_type == T_PIPE)
 	{
 		last_cpid = execute_pipe(root, current_pipe, prev_pipe, &is_last);
 		close_fd(prev_pipe);

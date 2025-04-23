@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   helper_funs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/16 18:01:32 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/22 19:07:49 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	exec_builtin(t_shell *cmd)
+{
+	if (!ft_strcmp(cmd->cmd, "cd") || !ft_strcmp(cmd->cmd, "unset")
+		|| (!ft_strcmp(cmd->cmd, "export") && (cmd->args[1]))
+		|| !ft_strcmp(cmd->cmd, "exit"))
+	{
+		if (!ft_strcmp(cmd->cmd, "cd"))
+			execute_cd(cmd);
+		else if (!ft_strcmp(cmd->cmd, "unset"))
+			execute_unset(cmd->args);
+		else if (!ft_strcmp(cmd->cmd, "export"))
+			execute_export(cmd->args);
+		else
+			exit_shell(cmd->args);
+		return (-1);
+	}
+	return (0);
+}
 
 void	check_paths(t_shell *cmd, char **paths)
 {
@@ -92,7 +111,7 @@ char	*handle_heredoc(char *lim)
 	fd = open(here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
 		clean_and_exit("open here_doc ");
-	limiter = ft_strjoin(lim, "\n");
+	limiter = ft_strjoin(remove_quotes(lim), "\n");
 	fdprintf(STDOUT_FILENO, "> ");
 	tmp = get_next_line(STDIN_FILENO);
 	while (tmp && ft_strcmp(tmp, limiter))

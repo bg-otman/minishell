@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:03:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/16 21:41:55 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/22 15:44:01 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,6 @@ char	*odd_quotes(char *env_value)
 	return (new);
 }
 
-char	*expand_line(char *line)
-{
-	char	*env_value;
-	char	*start;
-	char	*end;
-	char	*tmp;
-
-	while (ft_strchr(line, '$'))
-	{
-		start = get_start(line);
-		end = get_end(line);
-		tmp = get_var(line);
-		env_value = get_env(tmp);
-		tmp = ft_strjoin(start, env_value);
-		line = ft_strjoin(tmp, end);
-	}
-	return (line);
-}
-
 char	*call_heredoc(t_redir *redir)
 {
 	char	*file;
@@ -105,7 +86,7 @@ char	*call_heredoc(t_redir *redir)
 	while (tmp)
 	{
 		if (ft_strchr(tmp, '$'))
-			tmp = expand_line(tmp);
+			tmp = ft_strjoin(expand_token(tmp, 1, 1), "\n");
 		write(fd1, tmp, ft_strlen(tmp));
 		tmp = get_next_line(fd);
 	}

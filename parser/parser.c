@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 02:58:57 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/13 14:46:47 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/19 12:51:24 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,16 @@ t_tree	*build_tree(t_shell *start_node)
 
 static t_tree	*handle_parenthesis(t_tree *root)
 {
+	t_redir	*redir;
+
 	if (!root)
 		return (NULL);
 	root->left = handle_parenthesis(root->left);
 	if (root->node->cmd_type == T_PARENTHESIS)
 	{
+		redir = root->node->redirections;
 		root = build_tree(root->node->group);
+		group_redir(redir, root);
 		root = handle_parenthesis(root);
 	}
 	root->right = handle_parenthesis(root->right);

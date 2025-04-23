@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 15:23:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 15:28:36 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/22 22:19:09 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,17 @@ void	execute_env(char **args)
 		exit(EXIT_FAILURE);
 	}
 	while (expander()->my_env[i])
-		printf("%s\n", expander()->my_env[i++]);
+	{
+		if (ft_strchr(expander()->my_env[i], '='))
+		{
+			if (!(!ft_strncmp("PATH=", expander()->my_env[i], 5)
+					&& expander()->ignored))
+				fdprintf(1, "%s\n", expander()->my_env[i++]);
+			else
+				i++;
+		}
+		else
+			i++;
+	}
 	exit(EXIT_SUCCESS);
 }

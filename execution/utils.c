@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/17 15:24:10 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/21 10:00:24 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,8 @@ void	call_builtins(t_shell *cmd)
 		execute_echo(cmd->args);
 	else if (!ft_strcmp(cmd->args[0], "env"))
 		execute_env(cmd->args);
+	else if (!ft_strcmp(cmd->args[0], "export"))
+		execute_export(cmd->args);
+	else if (!ft_strcmp(cmd->args[0], "unset"))
+		execute_unset(cmd->args);
 }
