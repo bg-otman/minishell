@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/23 22:57:23 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 15:26:23 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ pid_t	execute_command(t_shell *cmd)
 	pid_t	process_id;
 
 	int (in_file), (out_file);
+	if (exec_builtin(cmd))
+		return (-1);
 	process_id = fork();
 	if (process_id == -1)
 		clean_and_exit("fork");
+	expander()->child = 1;
 	if (process_id == 0)
 	{
-		if (exec_builtin(cmd))
-			return (-1);
-		expander()->background = 1;
 		get_cmd_path(cmd);
 		if (get_redirections(cmd, &in_file, &out_file))
 			exit(EXIT_FAILURE);
@@ -61,7 +61,6 @@ pid_t	execute_pipe(t_tree *root)
 	close(current_pipe[0]);
 	last_cpid = execute_tree(root->right);
 	dup2(in, STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
 	close(in);
 	close(out);
 	return (last_cpid);

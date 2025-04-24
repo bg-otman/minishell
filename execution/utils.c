@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/21 10:00:24 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 15:50:49 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ int	wait_for_children(pid_t last_cpid)
 		return (expander()->exit_code);
 	while (wait(NULL) > 0)
 		;
+	expander()->child = 0;
 	if (WIFEXITED(status))
 		exit_code = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		return (expander()->exit_code);
 	return (exit_code);
 }
 

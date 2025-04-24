@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 22:57:01 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 17:50:16 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@
 
 # define TRUE 1
 # define FALSE 0
-# define PROMPT "🤖 \x1B[32m\e[1mminishell ▶️\x1B[0m  "
-# define B_PROMPT "💀 \x1B[31m\e[1mminishell ▶️\x1B[0m  "
+# define PROMPT "🤖 \x1B[32m\e[1mminishell \x1B[0m"
+# define B_PROMPT "💀 \x1B[31m\e[1mminishell \x1B[0m"
 # define INPUT_FILE 0
 # define OUTPUT_FILE 1
 # define SYNTAX_ERROR 2
@@ -76,7 +76,7 @@ typedef struct s_expander
 	char			**my_env;
 	int				ignored;
 	int				exit_code;
-	int				background;
+	int				child;
 }					t_expander;
 
 typedef struct s_env
@@ -135,5 +135,7 @@ void				clean_child_ressources(int prev_pipe, int *current_pipe);
 void				get_exit_code(char *cmd);
 char				*call_heredoc(t_redir *redir);
 void				call_builtins(t_shell *cmd);
+int					count_args(char **arr);
+void				add_to_env(t_env *env);
 
 #endif

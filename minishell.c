@@ -12,24 +12,6 @@
 
 #include "minishell.h"
 
-void	foo(int sig)
-{
-	if (sig == SIGINT)
-	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		expander()->exit_code = 130;
-	}
-}
-
-void	handle_signals(void)
-{
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, foo);
-}
-
 int	ft_readline(t_shell *tokens)
 {
 	char	*line;
@@ -53,6 +35,29 @@ int	ft_readline(t_shell *tokens)
 		return (2);
 	}
 	return (0);
+}
+
+void	foo(int sig)
+{
+	if (sig == SIGINT && expander()->child == 0)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		expander()->exit_code = 130;
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else
+	{
+		write(1, "\n", 1);
+		expander()->exit_code = 130;
+	}
+}
+
+void	handle_signals(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, foo);
 }
 
 void	launch_shell(t_shell *tokens)

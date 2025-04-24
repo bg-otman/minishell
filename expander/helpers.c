@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:07:49 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 22:47:09 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 15:24:42 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	group_redir(t_redir *redir, t_tree *root)
 {
 	t_redir	*head;
 
+	if (!redir)
+		return ;
 	head = redir;
 	if (root->node->cmd_type == T_LOGICAL_OP || root->node->cmd_type == T_PIPE)
 		root->node->redirections = redir;

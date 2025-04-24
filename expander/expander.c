@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 15:22:03 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 10:35:25 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,5 @@ int	expand_tokens(t_data *data)
 		}
 		tmp = tmp->next;
 	}
-	expand_wildcard(data);
 	return (0);
 }

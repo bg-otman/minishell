@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:33:15 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/22 19:07:16 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 17:50:46 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ static int	cd_too_many_args(char **args)
 
 static int	cd_single_arg(char **args)
 {
+	char	buf[1024];
+	t_env	env;
+
+	ft_bzero(&env, sizeof(t_env));
+	env.key = ft_strdup("OLDPWD");
+	env.value = ft_strdup(getcwd(buf, sizeof(buf)));
+	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
+	add_to_env(&env);
 	if (args[0][0] == '-' && args[0][1] != '\0')
 	{
 		fdprintf(2, "minishell: cd: no options allowed\n");
@@ -49,6 +57,11 @@ static int	cd_single_arg(char **args)
 		perror("cd");
 		return (1);
 	}
+	ft_bzero(&env, sizeof(t_env));
+	env.key = ft_strdup("PWD");
+	env.value = ft_strdup(getcwd(buf, sizeof(buf)));
+	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
+	add_to_env(&env);
 	return (0);
 }
 
