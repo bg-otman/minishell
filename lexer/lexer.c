@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/19 12:57:50 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/23 23:56:04 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int	lexer(char *line, t_shell *shell)
 	join_tokens(&data);
 	if (data.error)
 		return (data.error);
+	expand_wildcard(&data);
 	syntax_error(&data);
 	if (data.error)
 		return (data.error);

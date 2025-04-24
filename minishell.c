@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 13:43:29 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/22 18:39:45 by asajed           ###   ########.fr       */
+/*   Created: 2025/03/17 13:43:29 by asajed           #+#    #+#             */
+/*   Updated: 2025/04/22 21:21:22 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,29 @@ int	ft_readline(t_shell *tokens)
 	return (0);
 }
 
+void	foo(int sig)
+{
+	if (sig == SIGINT && expander()->child == 0)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		expander()->exit_code = 130;
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else
+	{
+		write(1, "\n", 1);
+		expander()->exit_code = 130;
+	}
+}
+
+void	handle_signals(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, foo);
+}
+
 void	launch_shell(t_shell *tokens)
 {
 	t_tree	*root;
@@ -52,14 +75,13 @@ void	launch_shell(t_shell *tokens)
 		if (exit_code == 2)
 			continue ;
 		root = parser(tokens);
-		last_cpid = execute_tree(root, prev_pipe, NULL, FALSE);
+		last_cpid = execute_tree(root);
 		exit_code = wait_for_children(last_cpid);
 		if (exit_code == -1)
 			exit_code = expander()->exit_code;
 		else
 			expander()->exit_code = exit_code;
 	}
-	rl_clear_history();
 }
 
 int	main(int ac, char **av, char **env)
@@ -68,6 +90,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	handle_signals();
 	expander()->env = env;
 	add_env();
 	launch_shell(&tokens);

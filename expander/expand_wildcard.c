@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:00:15 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/17 16:33:47 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 15:15:40 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,48 +41,19 @@ int	add_default(char **new, t_token *old, t_data *data)
 	return (0);
 }
 
-int	match_midlle(char **segs, char *file)
+int	match_pattern(const char *pattern, const char *str, int i, char quote)
 {
-	int		i;
-	char	*found;
-
-	i = 1;
-	if (!segs || !segs[0] || !segs[1])
-		return (1);
-	while (segs && segs[i + 1])
-	{
-		found = ft_strnstr(file, segs[i], ft_strlen(file));
-		if (!found)
-			return (0);
-		file = found + ft_strlen(segs[i++]);
-	}
-	return (1);
-}
-
-int	match(char *pattern, char *file)
-{
-	int		i;
-	int		j;
-	int		start_j;
-	char	**segs;
-
-	i = 0;
-	j = 0;
-	if (!ft_strncmp(".", file, 1) && pattern[0] != '.')
-		return (0);
-	while (file[j] && pattern[i] && pattern[i] != '*')
-		if (pattern[i++] != file[j++])
-			return (0);
-	start_j = j;
-	i = ft_strlen(pattern) - 1;
-	j = ft_strlen(file) - 1;
-	if (!j && i && pattern[i] != '*')
-		return (0);
-	while (i > 0 && j > 0 && pattern[i] != '*')
-		if (pattern[i--] != file[j--])
-			return (0);
-	segs = ft_split(pattern, '*');
-	return (match_midlle(segs, ft_substr(file, start_j, j - start_j + 1)));
+	if (*pattern == '\0' && *str == '\0')
+		return (TRUE);
+	if ((*pattern == '\'' || *pattern == '\"')
+		&& (!quote || *pattern == quote))
+		return (match_pattern(pattern + 1, str, (i == 0), *pattern));
+	if (*pattern == '*' && !i)
+		return (match_pattern(pattern + 1, str, i, quote) || (*str
+				&& match_pattern(pattern, str + 1, i, quote)));
+	if (*pattern == *str)
+		return (match_pattern(pattern + 1, str + 1, i, quote));
+	return (FALSE);
 }
 
 char	**compare_pattern(char *pattern)
@@ -95,11 +66,13 @@ char	**compare_pattern(char *pattern)
 	if (!dir)
 		return (NULL);
 	files = readdir(dir);
-	arr = ft_split("     ", ' ');
+	arr = NULL;
 	while (files)
 	{
-		if (match(pattern, files->d_name))
-			arr = add_to_array(arr, files->d_name);
+		if (pattern[0] != '.' && files->d_name[0] == '.')
+			;
+		else if (match_pattern(pattern, files->d_name, 0, 0))
+			arr = add_to_array(arr, odd_quotes(files->d_name));
 		files = readdir(dir);
 	}
 	closedir(dir);
@@ -109,6 +82,7 @@ char	**compare_pattern(char *pattern)
 void	expand_wildcard(t_data *data)
 {
 	t_token	*tmp;
+	t_token	*next;
 	char	**arr;
 
 	if (!data->tokens)
@@ -116,17 +90,13 @@ void	expand_wildcard(t_data *data)
 	tmp = *(data->tokens);
 	while (tmp)
 	{
-		if (tmp->value && ft_strchr(tmp->value, '*') && tmp->state == DEFAULT)
+		if (tmp->value && ft_strchr(tmp->value, '*'))
 		{
+			next = tmp->next;
 			arr = compare_pattern(tmp->value);
-			if (arr[0])
+			if (arr)
 				add_default(arr, tmp, data);
-			else
-			{
-				tmp = tmp->next;
-				continue ;
-			}
-			tmp = *(data->tokens);
+			tmp = next;
 			continue ;
 		}
 		tmp = tmp->next;

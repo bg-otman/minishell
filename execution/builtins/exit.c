@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:36:51 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 18:38:31 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 18:36:43 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,15 @@
 
 int	print_error(int err, char *arg)
 {
+	if (!expander()->pipe_exists)
+		fdprintf(2, "exit\n");
 	if (err == 1)
 	{
 		fdprintf(2, "minishell :exit: too many arguments\n");
-		expander()->exit_code = 1;
+		if (!expander()->pipe_exists)
+			expander()->exit_code = 1;
+		else
+			exit(1);
 	}
 	else if (err == 2)
 	{
@@ -30,8 +35,10 @@ int	print_error(int err, char *arg)
 
 void	free_and_exit(int exit_code)
 {
+	rl_clear_history();
 	free_garbage();
-	fdprintf(2, "exit\n");
+	if (!expander()->pipe_exists)
+		fdprintf(2, "exit\n");
 	exit(exit_code);
 }
 

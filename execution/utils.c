@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/21 10:00:24 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 19:34:06 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,27 @@ int	wait_for_children(pid_t last_cpid)
 		return (expander()->exit_code);
 	while (wait(NULL) > 0)
 		;
+	expander()->child = 0;
 	if (WIFEXITED(status))
 		exit_code = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		return (expander()->exit_code);
 	return (exit_code);
 }
 
-void	clean_child_ressources(int prev_pipe, int *current_pipe)
+void	clean_child_ressources(int in_file, int out_file)
 {
-	close_fd(prev_pipe);
-	if (current_pipe)
+	
+	char **arr = expander()->fds;
+	int i = 0;
+
+	while (arr && arr[i])
 	{
-		close_fd(current_pipe[0]);
-		close_fd(current_pipe[1]);
+		close_fd(ft_atoi(arr[i]));
+		i++;
 	}
+	close_fd(in_file);
+	close_fd(out_file);
 }
 
 int	get_in_out_file(t_redir *redir, int *in_file, int *out_file)
@@ -96,4 +104,6 @@ void	call_builtins(t_shell *cmd)
 		execute_export(cmd->args);
 	else if (!ft_strcmp(cmd->args[0], "unset"))
 		execute_unset(cmd->args);
+	else if (!ft_strcmp(cmd->args[0], "exit"))
+		exit_shell(cmd->args);
 }

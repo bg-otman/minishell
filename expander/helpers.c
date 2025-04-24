@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:07:49 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/20 17:12:34 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 19:32:27 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	escaped_char(t_token *token)
 	token->value = new;
 }
 
-pid_t	execute_sub(t_tree *root, int prev_pipe, int *curr_pipe, int is_last)
+pid_t	execute_sub(t_tree *root)
 {
 	pid_t	last_cpid;
 
@@ -52,7 +52,7 @@ pid_t	execute_sub(t_tree *root, int prev_pipe, int *curr_pipe, int is_last)
 	out = dup(1);
 	get_redirections(root->node, &in_file, &out_file);
 	root->node->redirections = NULL;
-	last_cpid = execute_tree(root, prev_pipe, curr_pipe, is_last);
+	last_cpid = execute_tree(root);
 	if (in_file != -1)
 		dup2(in, STDIN_FILENO);
 	if (out_file != -1)
@@ -68,6 +68,8 @@ void	group_redir(t_redir *redir, t_tree *root)
 {
 	t_redir	*head;
 
+	if (!redir)
+		return ;
 	head = redir;
 	if (root->node->cmd_type == T_LOGICAL_OP || root->node->cmd_type == T_PIPE)
 		root->node->redirections = redir;

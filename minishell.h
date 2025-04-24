@@ -6,7 +6,7 @@
 /*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 17:03:59 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/24 19:31:59 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -75,7 +76,18 @@ typedef struct s_expander
 	char			**my_env;
 	int				ignored;
 	int				exit_code;
+	int				child;
+	int				pipe_exists;
+	char			**fds;
 }					t_expander;
+
+typedef struct s_pipe
+{
+	int pipe[2];
+	int in;
+	int out;
+} t_pipe;
+
 
 typedef struct s_env
 {
@@ -106,8 +118,7 @@ t_tree				*parser(t_shell *tokens);
 t_tree				*create_node(t_shell *node);
 void				group_redir(t_redir *redir, t_tree *root);
 // execution
-pid_t				execute_tree(t_tree *root, int prev_pipe, int *current_pipe,
-						int is_last);
+pid_t				execute_tree(t_tree *root);
 int					wait_for_children(pid_t last_cpid);
 int					get_redirections(t_shell *cmd, int *in_file, int *out_file);
 void				get_cmd_path(t_shell *cmd);
@@ -121,8 +132,7 @@ void				execute_echo(char **args);
 void				execute_env(char **args);
 void				execute_export(char **args);
 void				execute_unset(char **args);
-pid_t				execute_sub(t_tree *root, int prev_pipe,
-						int *curr_pipe, int is_last);
+pid_t				execute_sub(t_tree *root);
 void				exit_shell(char **args);
 // helper functions
 int					is_builtin(char *cmd);
@@ -131,11 +141,12 @@ int					count_args(char **arr);
 void				clean_and_exit(const char *error);
 void				init_pipe(int *pipe);
 void				close_fd(int fd);
-void				clean_child_ressources(int prev_pipe, int *current_pipe);
+void				clean_child_ressources(int in_file, int out_file);
 void				get_exit_code(char *cmd);
 char				*call_heredoc(t_redir *redir);
 void				call_builtins(t_shell *cmd);
-char				*remove_last_dir(char *path);
-void				update_old_pwd(char	*old_path);
+int					count_args(char **arr);
+void				add_to_env(t_env *env);
+char				**add_to_array(char **arr, char *element);
 
 #endif

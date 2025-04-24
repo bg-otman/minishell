@@ -3,69 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:33:15 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/17 17:09:57 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/24 17:50:46 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static char	*handle_relative_path(char *target_path, char *curr_path)
+int	count_args(char **arr)
 {
-	char	**parts;
-	char	*tmp;
-	char	*res;
-	int		i;
-
-	res = ft_strdup(curr_path);
-	parts = ft_split(target_path, '/');
-	i = 0;
-	while (parts && parts[i])
-	{
-		if (!ft_strcmp(parts[i], ".."))
-		{
-			tmp = remove_last_dir(res);
-			res = tmp;
-		}
-		else if (parts[i][0] != '\0' && ft_strcmp(parts[i], "."))
-		{
-			tmp = ft_strjoin(res, "/");
-			res = ft_strjoin(tmp, parts[i]);
-		}
-		i++;
-	}
-	return (res);
-}
-
-void	update_env(char *new_path)
-{
-	char	**env;
-	int		i;
-	char	*tmp;
+	int	i;
 
 	i = 0;
-	env = expander()->my_env;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], "PWD=", 4))
-		{
-			if (new_path[0] == '/')
-			{
-				update_old_pwd(&env[i][4]);
-				env[i] = ft_strjoin("PWD=", new_path);
-			}
-			else
-			{
-				update_old_pwd(&env[i][4]);
-				tmp = handle_relative_path(new_path, &env[i][4]);
-				env[i] = ft_strjoin("PWD=", tmp);
-			}
-			return ;
-		}
+	while (arr && arr[i])
 		i++;
-	}
+	return (i);
 }
 
 static int	cd_too_many_args(char **args)
@@ -80,12 +34,19 @@ static int	cd_too_many_args(char **args)
 		perror("cd");
 		return (1);
 	}
-	
 	return (0);
 }
 
 static int	cd_single_arg(char **args)
 {
+	char	buf[1024];
+	t_env	env;
+
+	ft_bzero(&env, sizeof(t_env));
+	env.key = ft_strdup("OLDPWD");
+	env.value = ft_strdup(getcwd(buf, sizeof(buf)));
+	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
+	add_to_env(&env);
 	if (args[0][0] == '-' && args[0][1] != '\0')
 	{
 		fdprintf(2, "minishell: cd: no options allowed\n");
@@ -96,7 +57,11 @@ static int	cd_single_arg(char **args)
 		perror("cd");
 		return (1);
 	}
-	update_env(args[0]);
+	ft_bzero(&env, sizeof(t_env));
+	env.key = ft_strdup("PWD");
+	env.value = ft_strdup(getcwd(buf, sizeof(buf)));
+	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
+	add_to_env(&env);
 	return (0);
 }
 

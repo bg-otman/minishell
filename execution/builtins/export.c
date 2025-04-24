@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:26:12 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 17:28:33 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/22 23:18:12 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,24 @@ int	print_export(void)
 	i = 0;
 	while (expander()->my_env[i])
 	{
-		j = 0;
-		if (expander()->my_env[i][j])
-			fdprintf(1, "declare -x ");
-		while (expander()->my_env[i][j] && expander()->my_env[i][j] != '=')
-			fdprintf(1, "%c", expander()->my_env[i][j++]);
-		if (ft_strchr(expander()->my_env[i], '='))
-			fdprintf(1, "=\"%s\"", ft_strchr(expander()->my_env[i++], '=') + 1);
+		if (!((!ft_strncmp("PATH=", expander()->my_env[i], 5)
+					&& expander()->ignored)
+				|| !ft_strncmp(expander()->my_env[i], "_=", 2)))
+		{
+			j = 0;
+			if (expander()->my_env[i][j])
+				fdprintf(1, "declare -x ");
+			while (expander()->my_env[i][j] && expander()->my_env[i][j] != '=')
+				fdprintf(1, "%c", expander()->my_env[i][j++]);
+			if (ft_strchr(expander()->my_env[i], '='))
+				fdprintf(1, "=\"%s\"",
+					ft_strchr(expander()->my_env[i++], '=') + 1);
+			else
+				i++;
+			fdprintf(1, "\n");
+		}
 		else
 			i++;
-		fdprintf(1, "\n");
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -105,7 +113,11 @@ void	execute_export(char **args)
 	{
 		ft_bzero(&env, sizeof(t_env));
 		if (!parse_input(args[i], &env, msg))
+		{
+			if (!ft_strcmp(env.key, "PATH") && expander()->ignored)
+				expander()->ignored = 0;
 			add_to_env(&env);
+		}
 		else
 			expander()->exit_code = 1;
 		i++;

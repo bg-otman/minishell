@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:47:55 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/21 10:01:12 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/24 18:31:57 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_builtin(char *cmd)
 {
 	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "pwd")
 		|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
-		|| !ft_strcmp(cmd, "env") || !ft_strcmp(cmd, "exit")
+		|| !ft_strcmp(cmd, "env") || (!ft_strcmp(cmd, "exit") && expander()->pipe_exists)
 		|| !ft_strcmp(cmd, "unset"))
 		return (TRUE);
 	else

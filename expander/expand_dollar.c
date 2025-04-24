@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/20 22:07:15 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/23 15:22:11 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ char	*expand_token(char *value, int cat, t_state state)
 int	expand_dollar(t_data *data, t_token *token)
 {
 	char	*env_value;
+	char	**values;
 
 	env_value = expand_token(token->value, token->cat, token->state);
 	if (!env_value || !env_value[0])
@@ -112,7 +113,15 @@ int	expand_dollar(t_data *data, t_token *token)
 		return (0);
 	}
 	if (token->state == DEFAULT)
-		return (add_default(ft_split(env_value, ' '), token, data));
+	{
+		values = ft_split(env_value, ' ');
+		if (values[0] && !values[1])
+		{
+			token->value = values[0];
+			return (0);
+		}
+		return (add_default(values, token, data));
+	}
 	else
 		token->value = env_value;
 	return (0);
