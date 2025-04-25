@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fdprintf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 01:14:05 by asajed            #+#    #+#             */
-/*   Updated: 2025/03/21 02:03:30 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/25 11:00:57 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "fdprintf.h"
+#include "../libft.h"
 
 int	ft_putstr_fd(char *s, int fd)
 {
@@ -53,28 +52,28 @@ int	ft_check(char c, va_list lst, int fd)
 int	fdprintf(int fd, const char *str, ...)
 {
 	va_list	lst;
-	int		result;
-	int		j;
-	int		i;
 
+	int (result), (j), (i), (start);
 	result = 0;
 	i = 0;
+	start = 0;
 	va_start(lst, str);
-	if (!str || fd < 0)
-		return (va_end(lst), -1);
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '%')
 		{
+			if (start < i && write(fd, str + start, i - start))
+				result += i - start;
 			j = ft_check(str[++i], lst, fd);
-			if (j < 0)
-				return (va_end(lst), -1);
 			result += j;
+			start = i + 1;
 		}
-		else
-			result += ft_putchar_fd(str[i], fd);
+		else if (i == 0 || str[i - 1] == '%')
+			start = i;
 		i++;
 	}
+	if (start < i && write(fd, str + start, i - start))
+		result += i - start;
 	va_end(lst);
 	return (result);
 }

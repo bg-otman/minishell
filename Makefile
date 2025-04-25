@@ -8,7 +8,7 @@ EXP_O= $(EXP:.c=.o)
 PARS= parser/parser.c
 PARS_O= $(PARS:.c=.o)
 
-SRC= minishell.c fdprintf/fdprintf.c fdprintf/helpers.c execution/helper_funs.c execution/execution.c execution/utils.c execution/mini_helpers.c \
+SRC= minishell.c execution/helper_funs.c execution/execution.c execution/utils.c execution/mini_helpers.c \
 execution/get_next_line/get_next_line.c execution/get_next_line/get_next_line_utils.c execution/builtins/cd.c execution/builtins/pwd.c execution/builtins/echo.c \
 execution/builtins/env.c execution/builtins/export.c execution/builtins/unset.c execution/builtins/exit.c
 OBJ= $(SRC:.c=.o)
@@ -17,7 +17,7 @@ CC= cc
 CFLAGS= -g -Wall -Wextra -Werror
 RDLINE = -lreadline
 LIBFT= Libft/libft.a
-INCLUDES= minishell.h
+INCLUDES= minishell.h lexer/lexer.h expander/expander.h
 
 all: $(NAME)
 
@@ -32,7 +32,7 @@ $(LIBFT) :
 
 clean:
 	@rm -f $(OBJ) $(PARS_O) $(LEX_O) $(EXP_O)
-# @$(MAKE) -C libft clean
+	@$(MAKE) -C Libft clean
 
 fclean: clean
 	@rm -f $(NAME)

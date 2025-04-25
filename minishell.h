@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/24 17:50:16 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/25 10:30:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ typedef struct s_expander
 	int				ignored;
 	int				exit_code;
 	int				child;
+	int				pipe_exists;
+	char			**fds;
+	int				heredoc_err;
 }					t_expander;
 
 typedef struct s_env
@@ -113,7 +116,7 @@ int					wait_for_children(pid_t last_cpid);
 int					get_redirections(t_shell *cmd, int *in_file, int *out_file);
 void				get_cmd_path(t_shell *cmd);
 void				check_paths(t_shell *cmd, char **paths);
-char				*handle_heredoc(char *lim);
+char				*handle_heredoc(char *lim, int expand);
 char				*generate_tmp_name(void);
 int					exec_builtin(t_shell *cmd);
 void				execute_cd(t_shell *cmd);
@@ -131,11 +134,12 @@ int					count_args(char **arr);
 void				clean_and_exit(const char *error);
 void				init_pipe(int *pipe);
 void				close_fd(int fd);
-void				clean_child_ressources(int prev_pipe, int *current_pipe);
+void				clean_child_ressources(int in_file, int out_file);
 void				get_exit_code(char *cmd);
 char				*call_heredoc(t_redir *redir);
 void				call_builtins(t_shell *cmd);
 int					count_args(char **arr);
 void				add_to_env(t_env *env);
+char				**add_to_array(char **arr, char *element);
 
 #endif

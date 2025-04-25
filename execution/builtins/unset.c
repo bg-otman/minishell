@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 09:35:26 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 22:35:33 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/25 10:45:20 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	remove_from_env(char *arg)
 
 	i = 0;
 	j = 0;
-	arg = ft_strjoin(arg, "=");
 	while (expander()->my_env[i]
 		&& ft_strncmp(arg, expander()->my_env[i], ft_strlen(arg)))
 		i++;
-	if (!ft_strncmp(arg, expander()->my_env[i], ft_strlen(arg)))
+	if (expander()->my_env[i]
+		&& !ft_strncmp(arg, expander()->my_env[i], ft_strlen(arg)))
 	{
 		j = 0;
 		i = 0;
@@ -33,7 +33,7 @@ void	remove_from_env(char *arg)
 		{
 			if (!ft_strncmp(arg, expander()->my_env[i], ft_strlen(arg)))
 				i++;
-			else
+			else if (expander()->my_env[i])
 				expander()->my_env[j++] = env[i++];
 		}
 		env[j] = NULL;

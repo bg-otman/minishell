@@ -16,6 +16,7 @@ int	ft_readline(t_shell *tokens)
 {
 	char	*line;
 	char	*tmp;
+	int		exit;
 
 	if (!expander()->exit_code)
 		line = readline(PROMPT);
@@ -29,9 +30,12 @@ int	ft_readline(t_shell *tokens)
 	add_history(line);
 	if (is_all_space(line))
 		return (2);
-	if (lexer(line, tokens))
+	exit = lexer(line, tokens);
+	if (exit)
 	{
 		expander()->exit_code = SYNTAX_ERROR;
+		if (exit == 2)
+			expander()->exit_code = 130;
 		return (2);
 	}
 	return (0);
@@ -82,7 +86,6 @@ void	launch_shell(t_shell *tokens)
 		else
 			expander()->exit_code = exit_code;
 	}
-	rl_clear_history();
 }
 
 int	main(int ac, char **av, char **env)

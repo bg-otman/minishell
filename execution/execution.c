@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/24 15:26:23 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/25 10:30:26 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ pid_t	execute_command(t_shell *cmd)
 	expander()->child = 1;
 	if (process_id == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		get_cmd_path(cmd);
 		if (get_redirections(cmd, &in_file, &out_file))
 			exit(EXIT_FAILURE);
-		close_fd(in_file);
-		close_fd(out_file);
+		clean_child_ressources(in_file, out_file);
 		if (!cmd->cmd)
 			exit(EXIT_SUCCESS);
 		if (is_builtin(cmd->args[0]))
@@ -41,28 +41,39 @@ pid_t	execute_command(t_shell *cmd)
 	return (process_id);
 }
 
+char	**track_fds(char **arr, int fd1, int fd2)
+{
+	arr = add_to_array(arr, ft_itoa(fd1));
+	arr = add_to_array(arr, ft_itoa(fd2));
+	return (arr);
+}
+
 pid_t	execute_pipe(t_tree *root)
 {
 	pid_t	last_cpid;
-	int		current_pipe[2];
+	int		pipe_fd[2];
 
 	int (in), (out);
-	if (pipe(current_pipe) == -1)
+	expander()->pipe_exists = TRUE;
+	if (pipe(pipe_fd) == -1)
 		clean_and_exit("pipe");
 	in = dup(STDIN_FILENO);
 	out = dup(STDOUT_FILENO);
-	if (dup2(current_pipe[1], STDOUT_FILENO) < 0)
+	expander()->fds = track_fds(expander()->fds, in, out);
+	if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
 		clean_and_exit("dup2 error");
-	close(current_pipe[1]);
+	close(pipe_fd[1]);
+	expander()->fds = track_fds(expander()->fds, pipe_fd[0], pipe_fd[1]);
 	execute_tree(root->left);
 	dup2(out, STDOUT_FILENO);
-	if (dup2(current_pipe[0], STDIN_FILENO) < 0)
+	if (dup2(pipe_fd[0], STDIN_FILENO) < 0)
 		clean_and_exit("dup2 error");
-	close(current_pipe[0]);
+	close(pipe_fd[0]);
 	last_cpid = execute_tree(root->right);
 	dup2(in, STDIN_FILENO);
 	close(in);
 	close(out);
+	expander()->pipe_exists = FALSE;
 	return (last_cpid);
 }
 

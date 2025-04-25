@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 16:03:35 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 23:17:06 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/25 09:26:14 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,33 +92,4 @@ char	*odd_quotes(char *env_value)
 	}
 	new[j] = 0;
 	return (new);
-}
-
-char	*call_heredoc(t_redir *redir)
-{
-	char	*file;
-	int		fd;
-	int		fd1;
-	char	*tmp;
-
-	if (!redir->expand)
-		return (handle_heredoc(redir->file_name));
-	redir->file_name = handle_heredoc(redir->file_name);
-	file = ft_strdup(generate_tmp_name());
-	fd = open(redir->file_name, redir->open_mode, 0666);
-	fd1 = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	if (fd == -1 || fd1 == -1)
-		clean_and_exit("open here_doc ");
-	tmp = get_next_line(fd);
-	while (tmp)
-	{
-		if (ft_strchr(tmp, '$'))
-			tmp = ft_strjoin(expand_token(tmp, 1, 1), "\n");
-		write(fd1, tmp, ft_strlen(tmp));
-		tmp = get_next_line(fd);
-	}
-	close(fd);
-	unlink(redir->file_name);
-	close(fd1);
-	return (file);
 }
