@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:07:49 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/27 12:22:35 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:47:11 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_valid(int c)
 {
-	return (ft_isalnum(c) || c == '?');
+	return (ft_isalnum(c) || c == '?' || c == '_');
 }
 
 void	escaped_char(t_token *token)

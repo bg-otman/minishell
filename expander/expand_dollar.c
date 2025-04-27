@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/27 12:07:17 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:50:50 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ char	*get_var(char *str, int *i)
 
 	start = (*i);
 	j = (*i) + 1;
-	if (ft_isdigit(str[j]) || str[j] == '?' || !ft_isalpha(str[j]))
+	if (ft_isdigit(str[j]) || str[j] == '?'
+		|| (!ft_isalpha(str[j]) && str[j] != '_'))
 	{
 		(*i) += 2;
 		return (ft_substr(str, start + 1, (*i) - start -1));
 	}
-	while (str[j++] && ft_isalnum(str[j]))
+	while (str[j++] && (ft_isalnum(str[j]) || str[j] == '_'))
 		;
 	(*i) = j--;
 	return (ft_substr(str, start + 1, (*i) - start - 1));
