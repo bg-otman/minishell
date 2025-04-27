@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/25 10:45:02 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 12:07:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ void	clean_child_ressources(int in_file, int out_file)
 int	get_in_out_file(t_redir *redir, int *in_file, int *out_file)
 {
 	int (fd);
-	fd = -1;
 	while (redir)
 	{
+		if (!redir->file_name)
+			return (fdprintf(2, "minishell: ambiguous redirect\n"), 1);
 		fd = open(redir->file_name, redir->open_mode, 0666);
 		if (fd == -1)
 		{

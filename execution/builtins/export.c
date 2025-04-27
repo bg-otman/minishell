@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:26:12 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/22 23:18:12 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/26 19:54:04 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,17 @@ void	add_to_env(t_env *env)
 		a->my_env[i] = env->element;
 }
 
-int	parse_input(char *arg, t_env *env, char	*msg)
+int	parse_input(char *arg, t_env *env, char	*msg, char *msg1)
 {
 	int (i);
 	i = 1;
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
-		return (fdprintf(2, "%s", msg), 1);
+		return (fdprintf(2, "%s%s%s", msg, arg, msg1), 1);
 	while (arg[i] && arg[i] != '=')
 	{
 		if ((!ft_isalnum(arg[i]) && arg[i] != '+' && arg[i] != '_')
 			|| (arg[i] == '+' && arg[i + 1] != '='))
-			return (fdprintf(2, "%s", msg), 1);
+			return (fdprintf(2, "%s%s%s", msg, arg, msg1), 1);
 		i++;
 	}
 	env->append = 1;
@@ -101,18 +101,19 @@ void	execute_export(char **args)
 {
 	t_env	env;
 	char	*msg;
+	char	*msg1;
 
 	int (i);
 	i = 1;
-	msg = ft_strjoin(ft_strjoin("minishell: export: `", args[i]),
-			"' : not a valid identifier\n");
+	msg = ft_strdup("minishell: export: `");
+	msg1 = ft_strdup("' : not a valid identifier\n");
 	expander()->exit_code = 0;
 	if (!args[i])
 		print_export();
 	while (args[i])
 	{
 		ft_bzero(&env, sizeof(t_env));
-		if (!parse_input(args[i], &env, msg))
+		if (!parse_input(args[i], &env, msg, msg1))
 		{
 			if (!ft_strcmp(env.key, "PATH") && expander()->ignored)
 				expander()->ignored = 0;

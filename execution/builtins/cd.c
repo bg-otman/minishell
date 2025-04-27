@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:33:15 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/24 17:50:46 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/26 20:45:05 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,26 @@ static int	cd_too_many_args(char **args)
 	return (0);
 }
 
+char	*get_cwd(char *buf, int size, int old, char *path)
+{
+	if (!getcwd(buf, size) && old)
+	{
+		fdprintf(2, "cd: error retrieving current directory");
+		perror(": getcwd: cannot access parent directories");
+		return (get_env("PWD"));
+	}
+	else if (!getcwd(buf, size) && !old)
+		return (ft_strjoin(ft_strjoin(get_env("PWD"), "/"), path));
+	else if (old)
+		return (get_env("PWD"));
+	return (getcwd(buf, size));
+}
+
 static int	cd_single_arg(char **args)
 {
 	char	buf[1024];
 	t_env	env;
 
-	ft_bzero(&env, sizeof(t_env));
-	env.key = ft_strdup("OLDPWD");
-	env.value = ft_strdup(getcwd(buf, sizeof(buf)));
-	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
-	add_to_env(&env);
 	if (args[0][0] == '-' && args[0][1] != '\0')
 	{
 		fdprintf(2, "minishell: cd: no options allowed\n");
@@ -58,8 +68,12 @@ static int	cd_single_arg(char **args)
 		return (1);
 	}
 	ft_bzero(&env, sizeof(t_env));
+	env.key = ft_strdup("OLDPWD");
+	env.value = ft_strdup(get_cwd(buf, sizeof(buf), 1, args[0]));
+	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
+	add_to_env(&env);
 	env.key = ft_strdup("PWD");
-	env.value = ft_strdup(getcwd(buf, sizeof(buf)));
+	env.value = ft_strdup(get_cwd(buf, sizeof(buf), 0, args[0]));
 	env.element = ft_strjoin(ft_strjoin(env.key, "="), env.value);
 	add_to_env(&env);
 	return (0);

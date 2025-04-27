@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/25 10:30:02 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 12:20:04 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include <sys/stat.h>
 
 # define TRUE 1
 # define FALSE 0
@@ -110,6 +111,7 @@ char				*remove_quotes(char *token);
 t_tree				*parser(t_shell *tokens);
 t_tree				*create_node(t_shell *node);
 void				group_redir(t_redir *redir, t_tree *root);
+char				*get_env(char *name);
 // execution
 pid_t				execute_tree(t_tree *root);
 int					wait_for_children(pid_t last_cpid);
@@ -127,6 +129,7 @@ void				execute_export(char **args);
 void				execute_unset(char **args);
 pid_t				execute_sub(t_tree *root);
 void				exit_shell(char **args);
+char				**track_fds(char **arr, int fd1, int fd2);
 // helper functions
 int					is_builtin(char *cmd);
 int					fdprintf(int fd, const char *str, ...);

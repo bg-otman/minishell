@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:47:55 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/25 10:44:37 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 12:17:16 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ void	close_fd(int fd)
 
 void	get_exit_code(char *cmd)
 {
+	struct stat	sb;
+
+	if (stat(cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+	{
+		fdprintf(2, "minishell: %s: Is a directory\n", cmd);
+		exit(126);
+	}
 	if (errno == EACCES)
 	{
 		fdprintf(2, "minishell: %s: Permission denied\n", cmd);

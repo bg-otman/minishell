@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 19:11:19 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/24 17:13:24 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/26 20:21:55 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	execute_pwd(t_shell *cmd)
 {
 	char	**env;
 	char	buffer[1024];
+	char	*pwd;
 	int		i;
 
 	(void)cmd;
@@ -25,7 +26,10 @@ void	execute_pwd(t_shell *cmd)
 		fdprintf(2, "minishell: pwd: no options allowed\n");
 		exit(EXIT_FAILURE);
 	}
-	printf("%s\n", getcwd(buffer, sizeof(buffer)));
+	pwd = getcwd(buffer, sizeof(buffer));
+	if (!pwd)
+		pwd = get_env("PWD");
+	printf("%s\n", pwd);
 	i = 0;
 	env = expander()->my_env;
 	exit(EXIT_SUCCESS);

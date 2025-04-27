@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:00:15 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/24 15:15:40 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 12:05:39 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int	add_default(char **new, t_token *old, t_data *data)
 		{
 			if (previous && is_redirection(previous->value) && i > 1)
 			{
-				data->error = 1;
-				fdprintf(2, "minishell: %s: ambiguous redirect\n", old->value);
+				tmp->value = NULL;
 				return (1);
 			}
 		}
@@ -61,6 +60,7 @@ char	**compare_pattern(char *pattern)
 	DIR				*dir;
 	struct dirent	*files;
 	char			**arr;
+	char			*name;
 
 	dir = opendir(".");
 	if (!dir)
@@ -69,10 +69,13 @@ char	**compare_pattern(char *pattern)
 	arr = NULL;
 	while (files)
 	{
+		name = ft_strdup(files->d_name);
+		if (pattern[ft_strlen(pattern) - 1] == '/' && files->d_type == 4)
+			name = ft_strjoin(files->d_name, "/");
 		if (pattern[0] != '.' && files->d_name[0] == '.')
 			;
-		else if (match_pattern(pattern, files->d_name, 0, 0))
-			arr = add_to_array(arr, odd_quotes(files->d_name));
+		else if (match_pattern(pattern, name, 0, 0))
+			arr = add_to_array(arr, odd_quotes(name));
 		files = readdir(dir);
 	}
 	closedir(dir);

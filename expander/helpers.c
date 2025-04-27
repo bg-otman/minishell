@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:07:49 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/24 19:32:27 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/27 12:22:35 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ pid_t	execute_sub(t_tree *root)
 	out = dup(1);
 	get_redirections(root->node, &in_file, &out_file);
 	root->node->redirections = NULL;
+	expander()->fds = track_fds(expander()->fds, in, out);
+	expander()->fds = track_fds(expander()->fds, in_file, out_file);
 	last_cpid = execute_tree(root);
 	if (in_file != -1)
 		dup2(in, STDIN_FILENO);

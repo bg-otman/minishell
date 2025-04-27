@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/25 10:43:09 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/26 18:55:38 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ char	*handle_heredoc(char *lim, int expand)
 	pid_t	pid;
 	int		status;
 
+	if (expander()->heredoc_err == 1)
+		return (NULL);
 	expander()->child = 2;
 	here_doc_file = ft_strdup(generate_tmp_name());
 	pid = fork();

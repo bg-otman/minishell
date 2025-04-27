@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 09:35:26 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/25 10:45:20 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/27 12:10:30 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	execute_unset(char **args)
 	}
 	while (args[i])
 	{
-		remove_from_env(args[i]);
+		if (!ft_strchr(args[i], '='))
+			remove_from_env(args[i]);
 		i++;
 	}
 }
