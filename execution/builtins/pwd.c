@@ -14,9 +14,7 @@
 
 void	execute_pwd(t_shell *cmd)
 {
-	char	**env;
 	char	buffer[1024];
-	int		i;
 
 	(void)cmd;
 	if (cmd->args[1] && (cmd->args[1][0] == '-' && (cmd->args[1][1] != '\0'
@@ -25,8 +23,6 @@ void	execute_pwd(t_shell *cmd)
 		fdprintf(2, "minishell: pwd: no options allowed\n");
 		exit(EXIT_FAILURE);
 	}
-	printf("%s\n", getcwd(buffer, sizeof(buffer)));
-	i = 0;
-	env = expander()->my_env;
+	fdprintf(1, "%s\n", getcwd(buffer, sizeof(buffer)));
 	exit(EXIT_SUCCESS);
 }

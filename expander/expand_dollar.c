@@ -82,20 +82,18 @@ char	*expand_token(char *value, int cat, t_state state)
 	i = 0;
 	j = 0;
 	new = ft_strdup("");
-	while (value[i])
+	while (value && value[i])
 	{
-		while (value[i] && value[i] != '$')
+		while (value && value[i] && value[i] != '$')
 			new = add_to_string(new, value[i], &i, &j);
-		new[j] = 0;
-		if (value[i] == '$' && ft_valid(value[i + 1]))
+		if (value && value[i] == '$' && ft_valid(value[i + 1]))
 		{
 			new = ft_strjoin(new, get_env(get_var(value, &i)));
-			while (new[j++])
-				;
+			j = ft_strlen(new);
 		}
-		else if (value[i] == '$' && !cat && !state && !value[i + 1])
+		else if (value && value[i] == '$' && !cat && !state && !value[i + 1])
 			i++;
-		else
+		else if (value && value[i])
 			new = add_to_string(new, value[i], &i, &j);
 	}
 	return (new);

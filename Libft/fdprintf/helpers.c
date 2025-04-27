@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 01:14:08 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/03 18:59:14 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:00:53 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdprintf.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s && s[i])
-		i++;
-	return (i);
-}
+#include "../libft.h"
 
 int	ft_unsign_fd(unsigned int n, int fd)
 {

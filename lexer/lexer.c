@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 07:59:06 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/23 23:56:04 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/25 09:43:43 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,11 @@ int	lexer(char *line, t_shell *shell)
 	if (data.error)
 		return (data.error);
 	set_list(*data.tokens, shell);
+	if (expander()->heredoc_err)
+	{
+		expander()->heredoc_err = 0;
+		return (2);
+	}
 	get_types(shell);
 	return (data.error);
 }

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fdprintf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 01:14:05 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/24 19:49:35 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:00:57 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "fdprintf.h"
+#include "../libft.h"
 
 int	ft_putstr_fd(char *s, int fd)
 {
@@ -57,6 +56,7 @@ int	fdprintf(int fd, const char *str, ...)
 	int (result), (j), (i), (start);
 	result = 0;
 	i = 0;
+	start = 0;
 	va_start(lst, str);
 	while (str && str[i])
 	{
@@ -77,4 +77,3 @@ int	fdprintf(int fd, const char *str, ...)
 	va_end(lst);
 	return (result);
 }
-

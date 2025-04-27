@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:08:59 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/24 19:35:14 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:30:26 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ pid_t	execute_command(t_shell *cmd)
 	expander()->child = 1;
 	if (process_id == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		get_cmd_path(cmd);
 		if (get_redirections(cmd, &in_file, &out_file))
 			exit(EXIT_FAILURE);
@@ -46,7 +47,6 @@ char	**track_fds(char **arr, int fd1, int fd2)
 	arr = add_to_array(arr, ft_itoa(fd2));
 	return (arr);
 }
-
 
 pid_t	execute_pipe(t_tree *root)
 {

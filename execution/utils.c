@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 16:58:41 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/24 19:34:06 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:45:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,22 @@ int	wait_for_children(pid_t last_cpid)
 	if (WIFEXITED(status))
 		exit_code = WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
+	{
+		exit_code = WTERMSIG(status);
+		if (exit_code == SIGQUIT)
+			expander()->exit_code = 131;
 		return (expander()->exit_code);
+	}
 	return (exit_code);
 }
 
 void	clean_child_ressources(int in_file, int out_file)
 {
-	
-	char **arr = expander()->fds;
-	int i = 0;
+	char	**arr;
+	int		i;
 
+	i = 0;
+	arr = expander()->fds;
 	while (arr && arr[i])
 	{
 		close_fd(ft_atoi(arr[i]));

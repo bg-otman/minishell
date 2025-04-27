@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   helper_funs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 13:49:20 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/24 18:31:33 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:43:09 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../expander/expander.h"
 
 int	exec_builtin(t_shell *cmd)
 {
@@ -51,34 +51,6 @@ void	check_paths(t_shell *cmd, char **paths)
 	}
 }
 
-void	get_cmd_path(t_shell *cmd)
-{
-	int		i;
-	char	**env;
-	char	**paths;
-
-	i = 0;
-	env = expander()->my_env;
-	paths = NULL;
-	if (!cmd->cmd)
-		return ;
-	while (env && env[i])
-	{
-		if (!ft_strncmp(env[i], "PATH=", 5))
-		{
-			paths = ft_split(env[i] + 5, ':');
-			break ;
-		}
-		i++;
-	}
-	if (ft_search(cmd->cmd, '/'))
-	{
-		cmd->is_exist = TRUE;
-		return ;
-	}
-	check_paths(cmd, paths);
-}
-
 char	*generate_tmp_name(void)
 {
 	int		i;
@@ -98,16 +70,14 @@ char	*generate_tmp_name(void)
 	}
 }
 
-char	*handle_heredoc(char *lim)
+void	exec_heredoc_child(char *lim, char *here_doc_file, int expand)
 {
 	char	*tmp;
-	char	*warning_msg;
 	char	*limiter;
-	char	*here_doc_file;
+	char	*warning_msg;
 	int		fd;
 
-	expander()->child = 2;
-	here_doc_file = ft_strdup(generate_tmp_name());
+	signal(SIGINT, SIG_DFL);
 	warning_msg = "minishell: warning: here-document delimited by end-of-file";
 	fd = open(here_doc_file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
@@ -117,6 +87,8 @@ char	*handle_heredoc(char *lim)
 	tmp = get_next_line(STDIN_FILENO);
 	while (tmp && ft_strcmp(tmp, limiter))
 	{
+		if (expand)
+			tmp = expand_token(tmp, 1, 1);
 		write(fd, tmp, ft_strlen(tmp));
 		fdprintf(STDOUT_FILENO, "> ");
 		tmp = get_next_line(STDIN_FILENO);
@@ -124,6 +96,29 @@ char	*handle_heredoc(char *lim)
 	if (!tmp)
 		fdprintf(STDOUT_FILENO, "\n%s (wanted `%s')\n", warning_msg, lim);
 	close(fd);
+	exit(EXIT_SUCCESS);
+}
+
+char	*handle_heredoc(char *lim, int expand)
+{
+	char	*here_doc_file;
+	pid_t	pid;
+	int		status;
+
+	expander()->child = 2;
+	here_doc_file = ft_strdup(generate_tmp_name());
+	pid = fork();
+	if (pid == -1)
+		return (NULL);
+	if (pid == 0)
+		exec_heredoc_child(remove_quotes(lim), here_doc_file, expand);
+	waitpid(pid, &status, 0);
 	expander()->child = 0;
+	if (!(WIFEXITED(status) && (WEXITSTATUS(status) == 0)))
+	{
+		expander()->heredoc_err = 1;
+		unlink(here_doc_file);
+		return (NULL);
+	}
 	return (here_doc_file);
 }

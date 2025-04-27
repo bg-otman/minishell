@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:48:13 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/24 19:31:59 by obouizi          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:30:02 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,8 @@ typedef struct s_expander
 	int				child;
 	int				pipe_exists;
 	char			**fds;
+	int				heredoc_err;
 }					t_expander;
-
-typedef struct s_pipe
-{
-	int pipe[2];
-	int in;
-	int out;
-} t_pipe;
-
 
 typedef struct s_env
 {
@@ -123,7 +116,7 @@ int					wait_for_children(pid_t last_cpid);
 int					get_redirections(t_shell *cmd, int *in_file, int *out_file);
 void				get_cmd_path(t_shell *cmd);
 void				check_paths(t_shell *cmd, char **paths);
-char				*handle_heredoc(char *lim);
+char				*handle_heredoc(char *lim, int expand);
 char				*generate_tmp_name(void);
 int					exec_builtin(t_shell *cmd);
 void				execute_cd(t_shell *cmd);

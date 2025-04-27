@@ -16,6 +16,7 @@ int	ft_readline(t_shell *tokens)
 {
 	char	*line;
 	char	*tmp;
+	int		exit;
 
 	if (!expander()->exit_code)
 		line = readline(PROMPT);
@@ -29,15 +30,18 @@ int	ft_readline(t_shell *tokens)
 	add_history(line);
 	if (is_all_space(line))
 		return (2);
-	if (lexer(line, tokens))
+	exit = lexer(line, tokens);
+	if (exit)
 	{
 		expander()->exit_code = SYNTAX_ERROR;
+		if (exit == 2)
+			expander()->exit_code = 130;
 		return (2);
 	}
 	return (0);
 }
 
-void	foo(int sig)
+void	redisplay_prompt(int sig)
 {
 	if (sig == SIGINT && expander()->child == 0)
 	{
@@ -57,7 +61,7 @@ void	foo(int sig)
 void	handle_signals(void)
 {
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, foo);
+	signal(SIGINT, redisplay_prompt);
 }
 
 void	launch_shell(t_shell *tokens)
@@ -65,10 +69,8 @@ void	launch_shell(t_shell *tokens)
 	t_tree	*root;
 	int		exit_code;
 	pid_t	last_cpid;
-	int		prev_pipe;
 
 	exit_code = 0;
-	prev_pipe = -1;
 	while (TRUE)
 	{
 		exit_code = ft_readline(tokens);
