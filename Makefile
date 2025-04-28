@@ -14,7 +14,7 @@ execution/builtins/env.c execution/builtins/export.c execution/builtins/unset.c 
 OBJ= $(SRC:.c=.o)
 NAME= minishell
 CC= cc
-CFLAGS= -g -Wall -Wextra -Werror
+CFLAGS= -Wall -Wextra -Werror
 RDLINE = -lreadline
 LIBFT= Libft/libft.a
 INCLUDES= minishell.h lexer/lexer.h expander/expander.h
@@ -25,18 +25,18 @@ $(NAME): $(OBJ) $(LEX_O) $(EXP_O) $(PARS_O) $(LIBFT) $(INCLUDES)
 	@$(CC) $(CFLAGS) $(OBJ) $(LEX_O) $(EXP_O) $(PARS_O) $(LIBFT) $(RDLINE) -o $(NAME)
 
 $(LIBFT) :
-	@$(MAKE) -C Libft
+	@$(MAKE) --no-print-directory -C Libft
 
 %.o: %.c $(INCLUDES)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -f $(OBJ) $(PARS_O) $(LEX_O) $(EXP_O)
-	@$(MAKE) -C Libft clean
+	@$(MAKE) --no-print-directory -C Libft clean
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) -C Libft fclean
+	@$(MAKE) --no-print-directory -C Libft fclean
 
 re: fclean all
 

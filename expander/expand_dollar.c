@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 23:04:58 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/27 14:50:50 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:47:38 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,14 @@ char	*expand_token(char *value, int cat, t_state state)
 	{
 		while (value[i] && value[i] != '$')
 			new = add_to_string(new, value[i], &i, &j);
-		new[j] = 0;
 		if (value[i] == '$' && ft_valid(value[i + 1]))
 		{
 			new = ft_strjoin(new, get_env(get_var(value, &i)));
-			while (new[j++])
-				;
+			j = ft_strlen(new);
 		}
 		else if (value[i] == '$' && !cat && !state && !value[i + 1])
 			i++;
-		else
+		else if (value[i])
 			new = add_to_string(new, value[i], &i, &j);
 	}
 	return (new);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: obouizi <obouizi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:33:15 by obouizi           #+#    #+#             */
-/*   Updated: 2025/04/26 20:45:05 by asajed           ###   ########.fr       */
+/*   Updated: 2025/04/28 13:01:17 by obouizi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ char	*get_cwd(char *buf, int size, int old, char *path)
 	else if (!getcwd(buf, size) && !old)
 		return (ft_strjoin(ft_strjoin(get_env("PWD"), "/"), path));
 	else if (old)
+	{
+		if ((!get_env("PWD") || !get_env("PWD")[0])
+			&& expander()->pwd)
+			return (expander()->pwd);
 		return (get_env("PWD"));
+	}
 	return (getcwd(buf, size));
 }
 
@@ -57,6 +62,7 @@ static int	cd_single_arg(char **args)
 	char	buf[1024];
 	t_env	env;
 
+	expander()->pwd = getcwd(buf, sizeof(buf));
 	if (args[0][0] == '-' && args[0][1] != '\0')
 	{
 		fdprintf(2, "minishell: cd: no options allowed\n");
