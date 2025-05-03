@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 21:00:15 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/27 12:05:39 by asajed           ###   ########.fr       */
+/*   Updated: 2025/05/03 10:40:01 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	add_default(char **new, t_token *old, t_data *data)
 	{
 		if (tmp == old)
 		{
-			if (previous && is_redirection(previous->value) && i > 1)
+			if (previous && is_redirection(previous->value)
+				&& ft_strcmp(previous->value, "<<") && i > 1)
 			{
 				tmp->value = NULL;
 				return (1);

@@ -6,7 +6,7 @@
 /*   By: asajed <asajed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:46:14 by asajed            #+#    #+#             */
-/*   Updated: 2025/04/24 10:35:25 by asajed           ###   ########.fr       */
+/*   Updated: 2025/05/03 10:44:18 by asajed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ int	expand_tokens(t_data *data)
 	while (tmp)
 	{
 		next = tmp->next;
+		if (!ft_strcmp("<<", tmp->value))
+			next = next->next;
 		if (tmp->value && ft_strchr(tmp->value, '$') && (tmp->state == DEFAULT
 				|| tmp->state == DOUBLE_QUOTE))
 		{
@@ -130,7 +132,7 @@ int	expand_tokens(t_data *data)
 			tmp = next;
 			continue ;
 		}
-		tmp = tmp->next;
+		tmp = next;
 	}
 	return (0);
 }
